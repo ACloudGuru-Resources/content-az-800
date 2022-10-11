@@ -211,9 +211,9 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
   }
 }
 
-//RAIDC1
-resource RAIDC1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
-  name: 'RAIDC1-PIP'
+//RCAIDC1
+resource RCAIDC1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'RCAIDC1-PIP'
   location: location
   sku: {
     name: 'Standard'
@@ -223,21 +223,21 @@ resource RAIDC1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
   }
 }
 
-resource RAIDC1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'RAIDC1-NIC1'
+resource RCAIDC1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: 'RCAIDC1-NIC1'
   location: location
   properties: {
           ipConfigurations: [
             {
-              name: 'RAIDC1-NIC1-IPConfig1'
+              name: 'RCAIDC1-NIC1-IPConfig1'
               properties: {
                 privateIPAllocationMethod: 'Static'
-                privateIPAddress: '10.0.0.5'
+                privateIPAddress: '192.168.0.5'
                 publicIPAddress: {
-                  id: RAIDC1PIP.id
+                  id: RCAIDC1PIP.id
                 }
                 subnet: {
-                  id: vnetbarrierreef.properties.subnets[0].id
+                  id: vnetrivercityai.properties.subnets[0].id
                 }
               }
             }
@@ -245,15 +245,15 @@ resource RAIDC1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   }
 }
 
-resource RAIDC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-  name: 'RAIDC1'
+resource RCAIDC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
+  name: 'RCAIDC1'
   location: location
   properties: {
     hardwareProfile: {
       vmSize: 'Standard_B2s'
     }
     osProfile: {
-      computerName: 'RAIDC1'
+      computerName: 'RCAIDC1'
       adminUsername: vmUsername
       adminPassword: vmPassword
     }
@@ -265,7 +265,7 @@ resource RAIDC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
         version: 'latest'
       }
       osDisk: {
-        name: 'RAIDC1-OSDisk'
+        name: 'RCAIDC1-OSDisk'
         caching: 'ReadWrite'
         createOption: 'FromImage'
       }
@@ -273,7 +273,7 @@ resource RAIDC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: RAIDC1NIC1.id
+          id: RCAIDC1NIC1.id
         }
       ]
     }
@@ -285,9 +285,9 @@ resource RAIDC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   }
 }
 
-resource RAIDC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
-  parent: RAIDC1
-  name: 'RAIDC1-CSE'
+resource RCAIDC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+  parent: RCAIDC1
+  name: 'RCAIDC1-CSE'
   location: location
   properties: {
     publisher: 'Microsoft.Compute'
@@ -296,9 +296,9 @@ resource RAIDC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/RAIDC1.ps1'
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/RCAIDC1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File RAIDC1.ps1'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File RCAIDC1.ps1'
     }
   }
 }
@@ -339,6 +339,9 @@ resource BRAWKS1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 
 resource BRAWKS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'BRAWKS1'
+  dependsOn: [
+    BRADC1CSE
+  ]
   location: location
   properties: {
     hardwareProfile: {
@@ -390,7 +393,7 @@ resource BRAWKS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
       fileUris: [
         'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/BRAWKS1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password ${vmPassword}'
     }
   }
 }

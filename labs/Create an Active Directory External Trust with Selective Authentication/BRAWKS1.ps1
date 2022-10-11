@@ -12,6 +12,6 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAVolume" -Value 1
 Install-WindowsFeature RSAT-AD-Tools -IncludeAllSubFeature
 $pw = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
-$userName = "$($UserName)$($DomainName)"
+$userName = "$($UserName)@$($DomainName)"
 [pscredential]$creds = New-Object System.Management.Automation.PSCredential ($userName, $pw)
 Add-Computer -Credential $creds -DomainName "$($DomainName)" -Restart -Force

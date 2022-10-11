@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "164469567605486291"
+      "templateHash": "10871303694267029241"
     }
   },
   "parameters": {
@@ -265,7 +265,7 @@
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2019-11-01",
-      "name": "RAIDC1-PIP",
+      "name": "RCAIDC1-PIP",
       "location": "[parameters('location')]",
       "sku": {
         "name": "Standard"
@@ -277,41 +277,41 @@
     {
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2020-11-01",
-      "name": "RAIDC1-NIC1",
+      "name": "RCAIDC1-NIC1",
       "location": "[parameters('location')]",
       "properties": {
         "ipConfigurations": [
           {
-            "name": "RAIDC1-NIC1-IPConfig1",
+            "name": "RCAIDC1-NIC1-IPConfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "10.0.0.5",
+              "privateIPAddress": "192.168.0.5",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'RAIDC1-PIP')]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'RCAIDC1-PIP')]"
               },
               "subnet": {
-                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet-barrierreef')).subnets[0].id]"
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet-rivercityai')).subnets[0].id]"
               }
             }
           }
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses', 'RAIDC1-PIP')]",
-        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-barrierreef')]"
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'RCAIDC1-PIP')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-rivercityai')]"
       ]
     },
     {
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2020-12-01",
-      "name": "RAIDC1",
+      "name": "RCAIDC1",
       "location": "[parameters('location')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "Standard_B2s"
         },
         "osProfile": {
-          "computerName": "RAIDC1",
+          "computerName": "RCAIDC1",
           "adminUsername": "[parameters('vmUsername')]",
           "adminPassword": "[parameters('vmPassword')]"
         },
@@ -323,7 +323,7 @@
             "version": "latest"
           },
           "osDisk": {
-            "name": "RAIDC1-OSDisk",
+            "name": "RCAIDC1-OSDisk",
             "caching": "ReadWrite",
             "createOption": "FromImage"
           }
@@ -331,7 +331,7 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'RAIDC1-NIC1')]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'RCAIDC1-NIC1')]"
             }
           ]
         },
@@ -342,13 +342,13 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', 'RAIDC1-NIC1')]"
+        "[resourceId('Microsoft.Network/networkInterfaces', 'RCAIDC1-NIC1')]"
       ]
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "apiVersion": "2020-12-01",
-      "name": "[format('{0}/{1}', 'RAIDC1', 'RAIDC1-CSE')]",
+      "name": "[format('{0}/{1}', 'RCAIDC1', 'RCAIDC1-CSE')]",
       "location": "[parameters('location')]",
       "properties": {
         "publisher": "Microsoft.Compute",
@@ -357,13 +357,13 @@
         "autoUpgradeMinorVersion": true,
         "protectedSettings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/RAIDC1.ps1"
+            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/RCAIDC1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File RAIDC1.ps1"
+          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File RCAIDC1.ps1"
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', 'RAIDC1')]"
+        "[resourceId('Microsoft.Compute/virtualMachines', 'RCAIDC1')]"
       ]
     },
     {
@@ -446,6 +446,7 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
         "[resourceId('Microsoft.Network/networkInterfaces', 'BRAWKS1-NIC1')]"
       ]
     },
@@ -463,7 +464,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/BRAWKS1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1"
+          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password {0}', parameters('vmPassword'))]"
         }
       },
       "dependsOn": [
