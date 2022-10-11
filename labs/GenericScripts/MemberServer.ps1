@@ -3,7 +3,6 @@ param(
     $UserName = 'admin_user',
     $Password
 )
-
 $ProgressPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask -Verbose

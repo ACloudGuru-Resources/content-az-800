@@ -1,17 +1,14 @@
-param(
+param (
     $DomainName = 'corp.barrierreefaudio.com',
-    $UserName = 'admin_user',
-    $Password
+    $NetbiosName = 'CORP',
+    $DsrmPassword = 'p@55w0rd'
 )
-
 $ProgressPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
 Get-ScheduledTask -TaskName ServerManager | Disable-ScheduledTask -Verbose
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideClock" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "DisableNotificationCenter" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAVolume" -Value 1
-Install-WindowsFeature RSAT-AD-Tools -IncludeAllSubFeature
-$pw = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
-$userName = "$($UserName)$($DomainName)"
-[pscredential]$creds = New-Object System.Management.Automation.PSCredential ($userName, $pw)
-Add-Computer -Credential $creds -DomainName "$($DomainName)" -Restart -Force
+Install-WindowsFeature "AD-Domain-Services" -IncludeManagementTools | Out-Null
+$pw = ConvertTo-SecureString "$($DsrmPassword)" -AsPlainText -Force
+Install-ADDSForest -DomainName "$($DomainName)" -SafeModeAdministratorPassword $pw -DomainNetBIOSName "$($NetbiosName)" -InstallDns -Force
