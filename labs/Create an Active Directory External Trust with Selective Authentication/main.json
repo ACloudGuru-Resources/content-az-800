@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "10871303694267029241"
+      "templateHash": "8438882271356027219"
     }
   },
   "parameters": {
@@ -19,7 +19,7 @@
     },
     "vmPassword": {
       "type": "secureString",
-      "defaultValue": "[format('{0}-{1}', substring(uniqueString(resourceGroup().id), 0, 4), toUpper(substring(uniqueString(resourceGroup().location), 0, 4)))]"
+      "defaultValue": "[format('{0}{1}', substring(toUpper(uniqueString(resourceGroup().location)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
     }
   },
   "resources": [
@@ -208,8 +208,8 @@
         },
         "osProfile": {
           "computerName": "BRADC1",
-          "adminUsername": "[parameters('vmUsername')]",
-          "adminPassword": "[parameters('vmPassword')]"
+          "adminUsername": "admin_user",
+          "adminPassword": "CF2ndIXS2bj6XTtz"
         },
         "storageProfile": {
           "imageReference": {
@@ -312,8 +312,8 @@
         },
         "osProfile": {
           "computerName": "RCAIDC1",
-          "adminUsername": "[parameters('vmUsername')]",
-          "adminPassword": "[parameters('vmPassword')]"
+          "adminUsername": "admin_user",
+          "adminPassword": "CF2ndIXS2bj6XTtz"
         },
         "storageProfile": {
           "imageReference": {
@@ -416,8 +416,8 @@
         },
         "osProfile": {
           "computerName": "BRAWKS1",
-          "adminUsername": "[parameters('vmUsername')]",
-          "adminPassword": "[parameters('vmPassword')]"
+          "adminUsername": "admin_user",
+          "adminPassword": "CF2ndIXS2bj6XTtz"
         },
         "storageProfile": {
           "imageReference": {
@@ -464,7 +464,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/BRAWKS1.ps1"
           ],
-          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password {0}', parameters('vmPassword'))]"
+          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
         }
       },
       "dependsOn": [

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.9.1.41621",
+      "templateHash": "12658812054411129587"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "random": {
+      "type": "string",
+      "defaultValue": "[format('{0}{1}', substring(toUpper(uniqueString(resourceGroup().location)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
+    }
+  },
+  "resources": [],
+  "outputs": {
+    "output": {
+      "type": "string",
+      "value": "[parameters('random')]"
+    }
+  }
+}

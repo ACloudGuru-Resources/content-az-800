@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 param vmUsername string = 'admin_user'
 @secure()
-param vmPassword string = '${substring(uniqueString(resourceGroup().id),0,4)}-${toUpper(substring(uniqueString(resourceGroup().location),0,4))}'
+param vmPassword string = '${substring(toUpper(uniqueString(resourceGroup().location)),0,4)}${substring(uniqueString(resourceGroup().location),0,4)}'
 
 resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: 'vnet-barrierreef'
@@ -162,8 +162,8 @@ resource BRADC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     osProfile: {
       computerName: 'BRADC1'
-      adminUsername: vmUsername
-      adminPassword: vmPassword
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
     }
     storageProfile: {
       imageReference: {
@@ -254,8 +254,8 @@ resource RCAIDC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     osProfile: {
       computerName: 'RCAIDC1'
-      adminUsername: vmUsername
-      adminPassword: vmPassword
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
     }
     storageProfile: {
       imageReference: {
@@ -349,8 +349,8 @@ resource BRAWKS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     osProfile: {
       computerName: 'BRAWKS1'
-      adminUsername: vmUsername
-      adminPassword: vmPassword
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
     }
     storageProfile: {
       imageReference: {
@@ -393,7 +393,7 @@ resource BRAWKS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
       fileUris: [
         'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/BRAWKS1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password ${vmPassword}'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
