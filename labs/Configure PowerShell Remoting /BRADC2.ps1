@@ -17,4 +17,4 @@ $SecurePassword = ConvertTo-SecureString "$($Password)" -AsPlainText -Force #Not
 $UserName = "$($UserName)@$($DomainName)"
 [pscredential]$Credentials = New-Object System.Management.Automation.PSCredential ($UserName, $SecurePassword)
 Import-Module ADDSDeployment
-Install-ADDSDomainController -SafeModeAdministratorPassword $SecurePassword -Credential $Credentials  -DomainName "$($DomainName)" -NoRebootOnCompletion:$false -SiteName "Default-First-Site-Name"
+Install-ADDSDomainController -SafeModeAdministratorPassword $SecurePassword -Credential $Credentials -DomainName "$($DomainName)" -NoRebootOnCompletion:$false -SiteName "Default-First-Site-Name" -Force
