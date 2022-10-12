@@ -148,9 +148,101 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20PowerShell%20Remoting%20/BRADC1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
+    }
+  }
+}
+
+//BRADC2
+resource BRADC2PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'BRADC2-PIP'
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
+
+resource BRADC2NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: 'BRADC2-NIC1'
+  location: location
+  properties: {
+          ipConfigurations: [
+            {
+              name: 'BRADC2-NIC1-IPConfig1'
+              properties: {
+                privateIPAllocationMethod: 'Static'
+                privateIPAddress: '10.0.0.6'
+                publicIPAddress: {
+                  id: BRADC2PIP.id
+                }
+                subnet: {
+                  id: vnetbarrierreef.properties.subnets[0].id
+                }
+              }
+            }
+          ]
+  }
+}
+
+resource BRADC2 'Microsoft.Compute/virtualMachines@2020-12-01' = {
+  name: 'BRADC2'
+  location: location
+  properties: {
+    hardwareProfile: {
+      vmSize: 'Standard_B2s'
+    }
+    osProfile: {
+      computerName: 'BRADC2'
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
+    }
+    storageProfile: {
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter'
+        version: 'latest'
+      }
+      osDisk: {
+        name: 'BRADC2-OSDisk'
+        caching: 'ReadWrite'
+        createOption: 'FromImage'
+      }
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: BRADC2NIC1.id
+        }
+      ]
+    }
+    diagnosticsProfile: {
+      bootDiagnostics: {
+        enabled: false
+      }
+    }
+  }
+}
+
+resource BRADC2CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+  parent: BRADC2
+  name: 'BRADC2-CSE'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Compute'
+    type: 'CustomScriptExtension'
+    typeHandlerVersion: '1.10'
+    autoUpgradeMinorVersion: true
+    protectedSettings: {
+      fileUris: [
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20PowerShell%20Remoting%20/BRADC2.ps1'
+      ]
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC2.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
@@ -243,7 +335,7 @@ resource BRAWKS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20PowerShell%20Remoting%20/BRAWKS1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
