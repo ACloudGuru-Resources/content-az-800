@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "8438882271356027219"
+      "templateHash": "3599887490100846093"
     }
   },
   "parameters": {
@@ -255,7 +255,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/BRADC1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1"
+          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
         }
       },
       "dependsOn": [
