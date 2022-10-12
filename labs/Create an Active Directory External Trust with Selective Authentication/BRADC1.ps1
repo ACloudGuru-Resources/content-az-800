@@ -11,9 +11,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAVolume" -Value 1
 # Create a Local Group and Users
 $UserPassword = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
-New-LocalGroup Developers
 New-LocalUser -Name Developer -Password $UserPassword -UserMayNotChangePassword
-Add-LocalGroupMember -Name Developers -Member Developer
 New-LocalUser -Name NonDeveloper -Password $UserPassword -UserMayNotChangePassword
 # Install ADDS and Create Forest
 Install-WindowsFeature "AD-Domain-Services" -IncludeManagementTools | Out-Null
