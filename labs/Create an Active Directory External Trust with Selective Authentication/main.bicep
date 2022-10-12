@@ -206,7 +206,7 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
       fileUris: [
         'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/BRADC1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
