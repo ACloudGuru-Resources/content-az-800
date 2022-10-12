@@ -10,6 +10,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "DisableNotificationCenter" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAVolume" -Value 1
 # Create a non-Administrator User
+$UserPassword = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
 New-LocalUser -Name standard_user -Password $UserPassword
 # Install ADDS and Create Forest
 Install-WindowsFeature "AD-Domain-Services" -IncludeManagementTools | Out-Null

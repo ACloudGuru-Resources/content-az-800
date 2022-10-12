@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "12441410522784628708"
+      "templateHash": "13980867446643990322"
     }
   },
   "parameters": {
@@ -294,6 +294,7 @@
         }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
         "[resourceId('Microsoft.Compute/virtualMachines', 'BRADC2')]"
       ]
     },
@@ -347,7 +348,7 @@
         },
         "osProfile": {
           "computerName": "BRAWKS1",
-          "adminUsername": "admin_user",
+          "adminUsername": "standard_user",
           "adminPassword": "CF2ndIXS2bj6XTtz"
         },
         "storageProfile": {

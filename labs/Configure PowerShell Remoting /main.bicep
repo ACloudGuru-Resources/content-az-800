@@ -176,7 +176,7 @@ resource BRADC2NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
               name: 'BRADC2-NIC1-IPConfig1'
               properties: {
                 privateIPAllocationMethod: 'Static'
-                privateIPAddress: '10.0.0.5'
+                privateIPAddress: '10.0.0.6'
                 publicIPAddress: {
                   id: BRADC2PIP.id
                 }
