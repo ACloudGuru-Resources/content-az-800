@@ -176,7 +176,7 @@ resource BRADC2NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
               name: 'BRADC2-NIC1-IPConfig1'
               properties: {
                 privateIPAllocationMethod: 'Static'
-                privateIPAddress: '10.0.0.6'
+                privateIPAddress: '10.0.0.5'
                 publicIPAddress: {
                   id: BRADC2PIP.id
                 }
@@ -232,6 +232,9 @@ resource BRADC2 'Microsoft.Compute/virtualMachines@2020-12-01' = {
 resource BRADC2CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
   parent: BRADC2
   name: 'BRADC2-CSE'
+  dependsOn: [
+    BRADC1CSE
+  ]
   location: location
   properties: {
     publisher: 'Microsoft.Compute'
@@ -293,7 +296,7 @@ resource BRAWKS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     osProfile: {
       computerName: 'BRAWKS1'
-      adminUsername: 'admin_user'
+      adminUsername: 'standard_user'
       adminPassword: 'CF2ndIXS2bj6XTtz'
     }
     storageProfile: {
