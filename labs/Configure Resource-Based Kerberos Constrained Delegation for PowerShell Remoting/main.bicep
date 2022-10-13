@@ -14,7 +14,7 @@ resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
     }
     subnets: [
       {
-        name: 'identity-subnet'
+        name: 'server-subnet'
         properties:{
           addressPrefix: '10.0.0.0/24'
           networkSecurityGroup: {
@@ -151,6 +151,191 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
         'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Just%20Enough%20Administration%20(JEA)/BRADC1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
+    }
+  }
+}
+
+//BRAADM1
+resource BRAADMPIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'BRAADM-PIP'
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
+
+resource BRAADMNIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: 'BRAADM-NIC1'
+  location: location
+  properties: {
+          ipConfigurations: [
+            {
+              name: 'BRAADM-NIC1-IPConfig1'
+              properties: {
+                privateIPAllocationMethod: 'Static'
+                privateIPAddress: '10.0.0.6'
+                publicIPAddress: {
+                  id: BRAADMPIP.id
+                }
+                subnet: {
+                  id: vnetbarrierreef.properties.subnets[0].id
+                }
+              }
+            }
+          ]
+  }
+}
+
+resource BRAADM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
+  name: 'BRAADM'
+  location: location
+  properties: {
+    hardwareProfile: {
+      vmSize: 'Standard_B2s'
+    }
+    osProfile: {
+      computerName: 'BRAADM'
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
+    }
+    storageProfile: {
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter'
+        version: 'latest'
+      }
+      osDisk: {
+        name: 'BRAADM-OSDisk'
+        caching: 'ReadWrite'
+        createOption: 'FromImage'
+      }
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: BRAADMNIC1.id
+        }
+      ]
+    }
+    diagnosticsProfile: {
+      bootDiagnostics: {
+        enabled: false
+      }
+    }
+  }
+}
+
+resource BRAADMCSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+  parent: BRAADM
+  name: 'BRAADM-CSE'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Compute'
+    type: 'CustomScriptExtension'
+    typeHandlerVersion: '1.10'
+    autoUpgradeMinorVersion: true
+    protectedSettings: {
+      fileUris: [
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Just%20Enough%20Administration%20(JEA)/BRAADM.ps1'
+      ]
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAADM.ps1 -Password "CF2ndIXS2bj6XTtz"'
+    }
+  }
+}
+
+
+//BRAFS1
+resource BRAFS1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'BRAFS1-PIP'
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
+
+resource BRAFS1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: 'BRAFS1-NIC1'
+  location: location
+  properties: {
+          ipConfigurations: [
+            {
+              name: 'BRAFS1-NIC1-IPConfig1'
+              properties: {
+                privateIPAllocationMethod: 'Static'
+                privateIPAddress: '10.0.0.7'
+                publicIPAddress: {
+                  id: BRAFS1PIP.id
+                }
+                subnet: {
+                  id: vnetbarrierreef.properties.subnets[0].id
+                }
+              }
+            }
+          ]
+  }
+}
+
+resource BRAFS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
+  name: 'BRAFS1'
+  location: location
+  properties: {
+    hardwareProfile: {
+      vmSize: 'Standard_B2s'
+    }
+    osProfile: {
+      computerName: 'BRAFS1'
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
+    }
+    storageProfile: {
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter'
+        version: 'latest'
+      }
+      osDisk: {
+        name: 'BRAFS1-OSDisk'
+        caching: 'ReadWrite'
+        createOption: 'FromImage'
+      }
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: BRAFS1NIC1.id
+        }
+      ]
+    }
+    diagnosticsProfile: {
+      bootDiagnostics: {
+        enabled: false
+      }
+    }
+  }
+}
+
+resource BRAFS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+  parent: BRAFS1
+  name: 'BRAFS1-CSE'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Compute'
+    type: 'CustomScriptExtension'
+    typeHandlerVersion: '1.10'
+    autoUpgradeMinorVersion: true
+    protectedSettings: {
+      fileUris: [
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Just%20Enough%20Administration%20(JEA)/BRAFS1.ps1'
+      ]
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAFS1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
