@@ -21,13 +21,12 @@ New-SmbShare -Path C:\Scripts -Name Scripts -FullAccess Everyone
 
 # Create a PowerShell Script
 New-Item -Path C:\Scripts -Name "Get-RiskyUsers.ps1"
-Write-Output "Write-Host 'Risky User Report' -ForegroundColor Yellow; Write-Host 'Inactive Users' -ForegroundColor White; Search-ADAccount –AccountInactive –UsersOnly | Format-Table; Write-Host 'Users With No Password Expiry' -ForegroundColor White; Search-ADAccount –PasswordNeverExpires –UsersOnly | Format-Table" | Out-File -FilePath "C:\Scripts\Get-RiskyUsers.ps1"
+Write-Output "Write-Host 'Risky User Report' -ForegroundColor Yellow; Write-Host 'Inactive Users' -ForegroundColor White; Search-ADAccount -AccountInactive -UsersOnly | Format-Table; Write-Host 'Users With No Password Expiry' -ForegroundColor White; Search-ADAccount -PasswordNeverExpires -UsersOnly | Format-Table " | Out-File -FilePath "C:\Scripts\Get-RiskyUsers.ps1"
 
 # Wait for Domain
 while ((Test-NetConnection $($DomainName) -Port 389 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue).TcpTestSucceeded -eq $false) {
     Start-Sleep -Seconds 5
 }
-
 
 # Domain Join
 $pw = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
