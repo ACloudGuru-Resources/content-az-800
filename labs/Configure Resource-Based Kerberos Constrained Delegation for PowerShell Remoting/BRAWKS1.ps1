@@ -16,9 +16,10 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 Add-LocalGroupMember -Group "Remote Desktop Users" -Member 'S-1-5-11'
 
 # Wait for Domain
-while (-not (Test-NetConnection $($DomainName) -Port 389)) {
+while (-not (Test-NetConnection $($DomainName) -Port 389 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)) {
     Start-Sleep -Seconds 5
 }
+
 
 # Domain Join
 $pw = ConvertTo-SecureString "$($Password)" -AsPlainText -Force

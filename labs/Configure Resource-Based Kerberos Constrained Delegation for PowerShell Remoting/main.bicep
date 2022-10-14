@@ -418,9 +418,6 @@ resource BRAWKS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
   parent: BRAWKS1
   name: 'BRAWKS1-CSE'
   location: location
-  dependsOn: [
-    BRADC1CSE
-  ]
   properties: {
     publisher: 'Microsoft.Compute'
     type: 'CustomScriptExtension'

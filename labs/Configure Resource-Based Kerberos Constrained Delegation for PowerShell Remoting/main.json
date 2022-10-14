@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "6104806064769183483"
+      "templateHash": "10186786976911215237"
     }
   },
   "parameters": {
@@ -294,8 +294,7 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', 'BRAADM1')]",
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]"
+        "[resourceId('Microsoft.Compute/virtualMachines', 'BRAADM1')]"
       ]
     },
     {
@@ -399,7 +398,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
         "[resourceId('Microsoft.Compute/virtualMachines', 'BRAFS1')]"
       ]
     },
@@ -483,7 +481,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
         "[resourceId('Microsoft.Network/networkInterfaces', 'BRAWKS1-NIC1')]"
       ]
     },
@@ -505,7 +502,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
         "[resourceId('Microsoft.Compute/virtualMachines', 'BRAWKS1')]"
       ]
     }
