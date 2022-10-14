@@ -23,6 +23,11 @@ New-SmbShare -Path C:\Scripts -Name Scripts -FullAccess Everyone
 New-Item -Path C:\Scripts -Name "Get-RiskyUsers.ps1"
 Set-Content -Path C:\Scripts\Get-RiskyUsers.ps1 -Value "Write-Host 'Risky User Report' -ForegroundColor Yellow; Write-Host 'Inactive Users' -ForegroundColor White; Search-ADAccount –AccountInactive –UsersOnly | Format-Table; Write-Host 'Users With No Password Expiry' -ForegroundColor White; Search-ADAccount –PasswordNeverExpires –UsersOnly | Format-Table"
 
+# Wait for Domain
+while (-not (Test-NetConnection $($DomainName) -Port 389)) {
+    Start-Sleep -Seconds 5
+}
+
 # Domain Join
 $pw = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
 $userName = "$($UserName)@$($DomainName)"

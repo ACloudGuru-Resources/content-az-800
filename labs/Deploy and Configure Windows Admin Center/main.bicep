@@ -155,9 +155,9 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
   }
 }
 
-//BRAADM1
-resource BRAADM1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
-  name: 'BRAADM1-PIP'
+//BRAWAC1
+resource BRAWAC1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'BRAWAC1-PIP'
   location: location
   sku: {
     name: 'Standard'
@@ -167,18 +167,18 @@ resource BRAADM1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
   }
 }
 
-resource BRAADM1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'BRAADM1-NIC1'
+resource BRAWAC1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: 'BRAWAC1-NIC1'
   location: location
   properties: {
           ipConfigurations: [
             {
-              name: 'BRAADM1-NIC1-IPConfig1'
+              name: 'BRAWAC1-NIC1-IPConfig1'
               properties: {
                 privateIPAllocationMethod: 'Static'
                 privateIPAddress: '10.0.0.6'
                 publicIPAddress: {
-                  id: BRAADM1PIP.id
+                  id: BRAWAC1PIP.id
                 }
                 subnet: {
                   id: vnetbarrierreef.properties.subnets[0].id
@@ -189,15 +189,15 @@ resource BRAADM1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   }
 }
 
-resource BRAADM1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-  name: 'BRAADM1'
+resource BRAWAC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
+  name: 'BRAWAC1'
   location: location
   properties: {
     hardwareProfile: {
       vmSize: 'Standard_B2s'
     }
     osProfile: {
-      computerName: 'BRAADM1'
+      computerName: 'BRAWAC1'
       adminUsername: 'admin_user'
       adminPassword: 'CF2ndIXS2bj6XTtz'
     }
@@ -209,7 +209,7 @@ resource BRAADM1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
         version: 'latest'
       }
       osDisk: {
-        name: 'BRAADM1-OSDisk'
+        name: 'BRAWAC1-OSDisk'
         caching: 'ReadWrite'
         createOption: 'FromImage'
       }
@@ -217,7 +217,7 @@ resource BRAADM1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: BRAADM1NIC1.id
+          id: BRAWAC1NIC1.id
         }
       ]
     }
@@ -229,10 +229,13 @@ resource BRAADM1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   }
 }
 
-resource BRAADM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
-  parent: BRAADM1
-  name: 'BRAADM1-CSE'
+resource BRAADMCSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+  parent: BRAWAC1
+  name: 'BRAWAC1-CSE'
   location: location
+  dependsOn: [
+    BRADC1CSE
+  ]
   properties: {
     publisher: 'Microsoft.Compute'
     type: 'CustomScriptExtension'
@@ -240,9 +243,9 @@ resource BRAADM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRAADM1.ps1'
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRAWAC1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAADM1.ps1 -Password "CF2ndIXS2bj6XTtz"'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWAC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
@@ -326,6 +329,9 @@ resource BRAFS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
   parent: BRAFS1
   name: 'BRAFS1-CSE'
   location: location
+  dependsOn: [
+    BRADC1CSE
+  ]
   properties: {
     publisher: 'Microsoft.Compute'
     type: 'CustomScriptExtension'
@@ -376,6 +382,9 @@ resource BRAWKS1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 
 resource BRAWKS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'BRAWKS1'
+  dependsOn: [
+    BRADC1CSE
+  ]
   location: location
   properties: {
     hardwareProfile: {
