@@ -24,7 +24,7 @@ New-Item -Path C:\Scripts -Name "Get-RiskyUsers.ps1"
 Set-Content -Path C:\Scripts\Get-RiskyUsers.ps1 -Value "Write-Host 'Risky User Report' -ForegroundColor Yellow; Write-Host 'Inactive Users' -ForegroundColor White; Search-ADAccount –AccountInactive –UsersOnly | Format-Table; Write-Host 'Users With No Password Expiry' -ForegroundColor White; Search-ADAccount –PasswordNeverExpires –UsersOnly | Format-Table"
 
 # Wait for Domain
-while (-not (Test-NetConnection $($DomainName) -Port 389 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)) {
+while ((Test-NetConnection $($DomainName) -Port 389 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue).TcpTestSucceeded -eq $false) {
     Start-Sleep -Seconds 5
 }
 
