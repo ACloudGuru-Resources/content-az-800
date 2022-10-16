@@ -20,7 +20,6 @@ while ((Test-NetConnection $($DomainName) -Port 389 -ErrorAction SilentlyContinu
     Start-Sleep -Seconds 5
 }
 
-
 # Domain Join
 $pw = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
 $userName = "$($UserName)@$($DomainName)"
