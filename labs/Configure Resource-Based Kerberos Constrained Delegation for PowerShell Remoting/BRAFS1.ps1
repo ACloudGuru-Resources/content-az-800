@@ -23,7 +23,7 @@ New-SmbShare -Path C:\Data -Name Data -FullAccess Everyone
 $RandomFiles = @('File1.bak','File2.bak','File3.bak','File4.bak','File5.bak','File6.bak','File7.bak','File8.bak','File9.bak','File10.bak')
 foreach ($File in $RandomFiles) {
     New-Item -Path C:\Data -Name $File
-    Write-Output "$(Get-Random -Minimum 9999 -Maximum 99999)" | Out-File -FilePath "C:\Scripts\$($File)"
+    Write-Output "$(Get-Random -Minimum 9999 -Maximum 99999)" | Out-File -FilePath "C:\Data\$($File)"
 }
 
 # Wait for Domain
