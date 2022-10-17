@@ -148,7 +148,7 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRADC1.ps1'
+        ''
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
@@ -229,7 +229,7 @@ resource BRAWAC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   }
 }
 
-resource BRAADMCSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+resource BRAADM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
   parent: BRAWAC1
   name: 'BRAWAC1-CSE'
   location: location
@@ -243,7 +243,7 @@ resource BRAADMCSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRAWAC1.ps1'
+        ''
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWAC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
@@ -437,7 +437,7 @@ resource BRAWKS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRAWKS1.ps1'
+        ''
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }

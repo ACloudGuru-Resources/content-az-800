@@ -15,6 +15,11 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 # Add Authenticated Users to the Remote Desktop Users Group
 Add-LocalGroupMember -Group "Remote Desktop Users" -Member 'S-1-5-11'
 
+# Wait for Domain
+while ((Test-NetConnection $($DomainName) -Port 389 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue).TcpTestSucceeded -eq $false) {
+    Start-Sleep -Seconds 5
+}
+
 # Domain Join
 $pw = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
 $userName = "$($UserName)@$($DomainName)"
