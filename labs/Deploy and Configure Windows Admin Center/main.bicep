@@ -148,7 +148,7 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Admin%20Center/BRADC1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
@@ -229,7 +229,7 @@ resource BRAWAC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   }
 }
 
-resource BRAADM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+resource BRAWAC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
   parent: BRAWAC1
   name: 'BRAWAC1-CSE'
   location: location
@@ -243,105 +243,9 @@ resource BRAADM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Admin%20Center/BRAWAC1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWAC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
-    }
-  }
-}
-
-
-//BRAFS1
-resource BRAFS1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
-  name: 'BRAFS1-PIP'
-  location: location
-  sku: {
-    name: 'Standard'
-  }
-  properties: {
-    publicIPAllocationMethod: 'Static'
-  }
-}
-
-resource BRAFS1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'BRAFS1-NIC1'
-  location: location
-  properties: {
-          ipConfigurations: [
-            {
-              name: 'BRAFS1-NIC1-IPConfig1'
-              properties: {
-                privateIPAllocationMethod: 'Static'
-                privateIPAddress: '10.0.0.7'
-                publicIPAddress: {
-                  id: BRAFS1PIP.id
-                }
-                subnet: {
-                  id: vnetbarrierreef.properties.subnets[0].id
-                }
-              }
-            }
-          ]
-  }
-}
-
-resource BRAFS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-  name: 'BRAFS1'
-  location: location
-  properties: {
-    hardwareProfile: {
-      vmSize: 'Standard_B2s'
-    }
-    osProfile: {
-      computerName: 'BRAFS1'
-      adminUsername: 'admin_user'
-      adminPassword: 'CF2ndIXS2bj6XTtz'
-    }
-    storageProfile: {
-      imageReference: {
-        publisher: 'MicrosoftWindowsServer'
-        offer: 'WindowsServer'
-        sku: '2022-datacenter'
-        version: 'latest'
-      }
-      osDisk: {
-        name: 'BRAFS1-OSDisk'
-        caching: 'ReadWrite'
-        createOption: 'FromImage'
-      }
-    }
-    networkProfile: {
-      networkInterfaces: [
-        {
-          id: BRAFS1NIC1.id
-        }
-      ]
-    }
-    diagnosticsProfile: {
-      bootDiagnostics: {
-        enabled: false
-      }
-    }
-  }
-}
-
-resource BRAFS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
-  parent: BRAFS1
-  name: 'BRAFS1-CSE'
-  location: location
-  dependsOn: [
-    BRADC1CSE
-  ]
-  properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.10'
-    autoUpgradeMinorVersion: true
-    protectedSettings: {
-      fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRAFS1.ps1'
-      ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAFS1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
@@ -437,7 +341,7 @@ resource BRAWKS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Admin%20Center/BRAWKS1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
