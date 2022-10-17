@@ -3,6 +3,9 @@ param vmUsername string = 'admin_user'
 @secure()
 param vmPassword string = '${substring(toUpper(uniqueString(resourceGroup().location)),0,4)}${substring(uniqueString(resourceGroup().location),0,4)}'
 
+var customImageDefinitionName =  'Win2022_Eval_VHD'
+var customImageResourceId = resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', customImageDefinitionName, 'latest')
+
 resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: 'vnet-barrierreef'
   location: location
@@ -102,10 +105,7 @@ resource BRAHV1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        publisher: 'MicrosoftWindowsServer'
-        offer: 'WindowsServer'
-        sku: '2022-datacenter'
-        version: 'latest'
+        id: customImageResourceId
       }
       osDisk: {
         name: 'BRAHV1-OSDisk'
