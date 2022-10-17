@@ -1,8 +1,3 @@
-param(
-    $DomainName = 'corp.barrierreefaudio.com',
-    $UserName = 'admin_user',
-    $Password
-)
 # Speed Up Deployment
 $ProgressPreference = "SilentlyContinue"
 $WarningPreference = "SilentlyContinue"
