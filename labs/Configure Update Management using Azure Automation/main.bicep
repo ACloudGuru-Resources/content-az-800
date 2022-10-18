@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 param vmUsername string = 'admin_user'
 @secure()
-param vmPassword string = '${substring(toUpper(uniqueString(resourceGroup().name)),0,4)}${substring(uniqueString(resourceGroup().location),0,4)}!'
+param vmPassword string = '${substring(toUpper(uniqueString(resourceGroup().location)),0,4)}${substring(uniqueString(resourceGroup().location),0,4)}'
 
 resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: 'vnet-barrierreef'
@@ -14,18 +14,9 @@ resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
     }
     subnets: [
       {
-        name: 'server-subnet'
+        name: 'identity-subnet'
         properties:{
           addressPrefix: '10.0.0.0/24'
-          networkSecurityGroup: {
-            id: nsgdefault.id
-          }
-        }
-      }
-      {
-        name: 'workstation-subnet'
-        properties:{
-          addressPrefix: '10.0.1.0/24'
           networkSecurityGroup: {
             id: nsgdefault.id
           }
@@ -63,101 +54,6 @@ resource nsgdefault 'Microsoft.Network/networkSecurityGroups@2019-11-01' = {
     ]
   }
 }
-
-//BRAHW1
-resource BRAHW1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
-  name: 'BRAHW1-PIP'
-  location: location
-  sku: {
-    name: 'Standard'
-  }
-  properties: {
-    publicIPAllocationMethod: 'Static'
-  }
-}
-
-resource BRAHW1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'BRAHW1-NIC1'
-  location: location
-  properties: {
-          ipConfigurations: [
-            {
-              name: 'BRAHW1-NIC1-IPConfig1'
-              properties: {
-                privateIPAllocationMethod: 'Static'
-                privateIPAddress: '10.0.0.6'
-                publicIPAddress: {
-                  id: BRAHW1PIP.id
-                }
-                subnet: {
-                  id: vnetbarrierreef.properties.subnets[0].id
-                }
-              }
-            }
-          ]
-  }
-}
-
-resource BRAHW1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-  name: 'BRAHW1'
-  location: location
-  properties: {
-    hardwareProfile: {
-      vmSize: 'Standard_B2s'
-    }
-    osProfile: {
-      computerName: 'BRAHW1'
-      adminUsername: vmUsername
-      adminPassword: vmPassword
-    }
-    storageProfile: {
-      imageReference: {
-        publisher: 'MicrosoftWindowsServer'
-        offer: 'WindowsServer'
-        sku: '2022-datacenter'
-        version: 'latest'
-      }
-      osDisk: {
-        name: 'BRAHW1-OSDisk'
-        caching: 'ReadWrite'
-        createOption: 'FromImage'
-      }
-    }
-    networkProfile: {
-      networkInterfaces: [
-        {
-          id: BRAHW1NIC1.id
-        }
-      ]
-    }
-    diagnosticsProfile: {
-      bootDiagnostics: {
-        enabled: false
-      }
-    }
-  }
-}
-
-resource BRAHW1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
-  parent: BRAHW1
-  name: 'BRAHW1-CSE'
-  location: location
-  properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.10'
-    autoUpgradeMinorVersion: true
-    protectedSettings: {
-      fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Automate%20Hybrid%20Processes%20using%20Azure%20Automation/BRAHW1.ps1'
-      ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHW1.ps1 -Password "${vmPassword}"'
-    }
-  }
-}
-
-
-
 //BRADC1
 resource BRADC1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
   name: 'BRADC1-PIP'
@@ -201,8 +97,8 @@ resource BRADC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     osProfile: {
       computerName: 'BRADC1'
-      adminUsername: vmUsername
-      adminPassword: vmPassword
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
     }
     storageProfile: {
       imageReference: {
@@ -243,19 +139,104 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Automate%20Hybrid%20Processes%20using%20Azure%20Automation/BRADC1.ps1'
+        ''
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "${vmPassword}"'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
 
-resource automationAccount 'Microsoft.Automation/automationAccounts@2019-06-01' = {
-  name: 'aa-automation-prod-001'
+//BRADC2
+resource BRADC2PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'BRADC2-PIP'
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+  }
+}
+
+resource BRADC2NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: 'BRADC2-NIC1'
   location: location
   properties: {
-    sku: {
-      name: 'Free'
+          ipConfigurations: [
+            {
+              name: 'BRADC2-NIC1-IPConfig1'
+              properties: {
+                privateIPAllocationMethod: 'Static'
+                privateIPAddress: '10.0.0.6'
+                publicIPAddress: {
+                  id: BRADC2PIP.id
+                }
+                subnet: {
+                  id: vnetbarrierreef.properties.subnets[0].id
+                }
+              }
+            }
+          ]
+  }
+}
+
+resource BRADC2 'Microsoft.Compute/virtualMachines@2020-12-01' = {
+  name: 'BRADC2'
+  location: location
+  properties: {
+    hardwareProfile: {
+      vmSize: 'Standard_B2s'
+    }
+    osProfile: {
+      computerName: 'BRADC2'
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
+    }
+    storageProfile: {
+      imageReference: {
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter'
+        version: 'latest'
+      }
+      osDisk: {
+        name: 'BRADC2-OSDisk'
+        caching: 'ReadWrite'
+        createOption: 'FromImage'
+      }
+    }
+    networkProfile: {
+      networkInterfaces: [
+        {
+          id: BRADC2NIC1.id
+        }
+      ]
+    }
+    diagnosticsProfile: {
+      bootDiagnostics: {
+        enabled: false
+      }
+    }
+  }
+}
+
+resource BRADC2CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+  parent: BRADC2
+  name: 'BRADC2-CSE'
+  dependsOn: [
+    BRADC1CSE
+  ]
+  location: location
+  properties: {
+    publisher: 'Microsoft.Compute'
+    type: 'CustomScriptExtension'
+    typeHandlerVersion: '1.10'
+    autoUpgradeMinorVersion: true
+    protectedSettings: {
+      fileUris: [
+        ''
+      ]
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC2.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
