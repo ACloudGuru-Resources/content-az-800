@@ -141,7 +141,7 @@ resource BRAHV1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
       fileUris: [
         'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Onboard%20an%20On-Premises%20%20Windows%20Virtual%20Machine%20into%20Azure%20Arc/BRAHV1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
