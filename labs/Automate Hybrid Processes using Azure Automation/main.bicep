@@ -22,15 +22,6 @@ resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
           }
         }
       }
-      {
-        name: 'workstation-subnet'
-        properties:{
-          addressPrefix: '10.0.1.0/24'
-          networkSecurityGroup: {
-            id: nsgdefault.id
-          }
-        }
-      }
     ]
     dhcpOptions: {
       dnsServers: [
@@ -107,8 +98,8 @@ resource BRAHW1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     osProfile: {
       computerName: 'BRAHW1'
-      adminUsername: vmUsername
-      adminPassword: vmPassword
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
     }
     storageProfile: {
       imageReference: {
@@ -151,7 +142,7 @@ resource BRAHW1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
       fileUris: [
         'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Automate%20Hybrid%20Processes%20using%20Azure%20Automation/BRAHW1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHW1.ps1 -Password "${vmPassword}"'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHW1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }
@@ -201,8 +192,8 @@ resource BRADC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     osProfile: {
       computerName: 'BRADC1'
-      adminUsername: vmUsername
-      adminPassword: vmPassword
+      adminUsername: 'admin_user'
+      adminPassword: 'CF2ndIXS2bj6XTtz'
     }
     storageProfile: {
       imageReference: {
@@ -245,7 +236,7 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
       fileUris: [
         'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Automate%20Hybrid%20Processes%20using%20Azure%20Automation/BRADC1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "${vmPassword}"'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
   }
 }

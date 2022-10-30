@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "9998130221902991629"
+      "templateHash": "6285502910782867346"
     }
   },
   "parameters": {
@@ -19,7 +19,7 @@
     },
     "vmPassword": {
       "type": "secureString",
-      "defaultValue": "[format('{0}{1}!', substring(toUpper(uniqueString(resourceGroup().name)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
+      "defaultValue": "[format('{0}{1}', substring(toUpper(uniqueString(resourceGroup().location)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
     }
   },
   "resources": [
@@ -36,7 +36,7 @@
         },
         "subnets": [
           {
-            "name": "server-subnet",
+            "name": "identity-subnet",
             "properties": {
               "addressPrefix": "10.0.0.0/24",
               "networkSecurityGroup": {
@@ -79,110 +79,6 @@
           }
         ]
       }
-    },
-    {
-      "type": "Microsoft.Network/publicIPAddresses",
-      "apiVersion": "2019-11-01",
-      "name": "BRAHW1-PIP",
-      "location": "[parameters('location')]",
-      "sku": {
-        "name": "Standard"
-      },
-      "properties": {
-        "publicIPAllocationMethod": "Static"
-      }
-    },
-    {
-      "type": "Microsoft.Network/networkInterfaces",
-      "apiVersion": "2020-11-01",
-      "name": "BRAHW1-NIC1",
-      "location": "[parameters('location')]",
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "BRAHW1-NIC1-IPConfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "10.0.0.6",
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'BRAHW1-PIP')]"
-              },
-              "subnet": {
-                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet-barrierreef')).subnets[0].id]"
-              }
-            }
-          }
-        ]
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses', 'BRAHW1-PIP')]",
-        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-barrierreef')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines",
-      "apiVersion": "2020-12-01",
-      "name": "BRAHW1",
-      "location": "[parameters('location')]",
-      "properties": {
-        "hardwareProfile": {
-          "vmSize": "Standard_B2s"
-        },
-        "osProfile": {
-          "computerName": "BRAHW1",
-          "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "2022-datacenter",
-            "version": "latest"
-          },
-          "osDisk": {
-            "name": "BRAHW1-OSDisk",
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
-          }
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'BRAHW1-NIC1')]"
-            }
-          ]
-        },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": false
-          }
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', 'BRAHW1-NIC1')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "apiVersion": "2020-12-01",
-      "name": "[format('{0}/{1}', 'BRAHW1', 'BRAHW1-CSE')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "publisher": "Microsoft.Compute",
-        "type": "CustomScriptExtension",
-        "typeHandlerVersion": "1.10",
-        "autoUpgradeMinorVersion": true,
-        "protectedSettings": {
-          "fileUris": [
-            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Automate%20Hybrid%20Processes%20using%20Azure%20Automation/BRAHW1.ps1"
-          ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRAHW1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', 'BRAHW1')]"
-      ]
     },
     {
       "type": "Microsoft.Network/publicIPAddresses",
@@ -279,7 +175,7 @@
         "autoUpgradeMinorVersion": true,
         "protectedSettings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Automate%20Hybrid%20Processes%20using%20Azure%20Automation/BRADC1.ps1"
+            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Update%20Management%20using%20Azure%20Automation/BRADC1.ps1"
           ],
           "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
         }
@@ -289,15 +185,109 @@
       ]
     },
     {
-      "type": "Microsoft.Automation/automationAccounts",
-      "apiVersion": "2019-06-01",
-      "name": "aa-automation-prod-001",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2019-11-01",
+      "name": "BRADC2-PIP",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "BRADC2-NIC1",
       "location": "[parameters('location')]",
       "properties": {
-        "sku": {
-          "name": "Free"
+        "ipConfigurations": [
+          {
+            "name": "BRADC2-NIC1-IPConfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "10.0.0.6",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'BRADC2-PIP')]"
+              },
+              "subnet": {
+                "id": "[reference(resourceId('Microsoft.Network/virtualNetworks', 'vnet-barrierreef')).subnets[0].id]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', 'BRADC2-PIP')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', 'vnet-barrierreef')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-12-01",
+      "name": "BRADC2",
+      "location": "[parameters('location')]",
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_B2s"
+        },
+        "osProfile": {
+          "computerName": "BRADC2",
+          "adminUsername": "admin_user",
+          "adminPassword": "CF2ndIXS2bj6XTtz"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2022-datacenter",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "BRADC2-OSDisk",
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'BRADC2-NIC1')]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": false
+          }
         }
-      }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'BRADC2-NIC1')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2020-12-01",
+      "name": "[format('{0}/{1}', 'BRADC2', 'BRADC2-CSE')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.10",
+        "autoUpgradeMinorVersion": true,
+        "protectedSettings": {
+          "fileUris": [
+            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Update%20Management%20using%20Azure%20Automation/BRADC2.ps1"
+          ],
+          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRADC2.ps1 -Password \"CF2ndIXS2bj6XTtz\""
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
+        "[resourceId('Microsoft.Compute/virtualMachines', 'BRADC2')]"
+      ]
     }
   ]
 }

@@ -139,7 +139,7 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Update%20Management%20using%20Azure%20Automation/BRADC1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
@@ -234,7 +234,7 @@ resource BRADC2CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Update%20Management%20using%20Azure%20Automation/BRADC2.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC2.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }
