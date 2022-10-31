@@ -139,9 +139,9 @@ resource VM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Onboard%20an%20On-Premises%20%20Windows%20Virtual%20Machine%20into%20Azure%20Arc/VM1.ps1'
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Azure%20Automanage%20Machine%20Configuration/VM1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File VM1.ps1 -Password "CF2ndIXS2bj6XTtz"'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File VM1.ps1'
     }
   }
 }
