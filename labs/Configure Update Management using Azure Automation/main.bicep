@@ -240,3 +240,48 @@ resource BRADC2CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     }
   }
 }
+
+resource automationAccount 'Microsoft.Automation/automationAccounts@2019-06-01' = {
+  name: 'aa-automation-prod-001'
+  location: location
+  properties: {
+    sku: {
+      name: 'Free'
+    }
+  }
+}
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-10-01' = {
+  name: 'law-monitoring-prod-001'
+  location: location
+  properties: {
+    sku: {
+      name: 'pergb2018'
+    }
+  }
+}
+
+resource linkedWorkspace 'Microsoft.OperationalInsights/workspaces/linkedServices@2020-08-01' = {
+  name: 'Automation'
+  parent: logAnalyticsWorkspace
+  properties: {
+    resourceId: automationAccount.id
+  }
+}
+
+resource logAnalyticsSolution 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
+  name: 'Updates(${logAnalyticsWorkspace.name})'
+  location: location
+  dependsOn: [
+    linkedWorkspace
+  ]
+  properties: {
+    workspaceResourceId: logAnalyticsWorkspace.id
+  }
+  plan: {
+    name: 'Updates(${logAnalyticsWorkspace.name})'
+    product: 'OMSGallery/Updates'
+    publisher: 'Microsoft'
+    promotionCode: ''
+  }
+}

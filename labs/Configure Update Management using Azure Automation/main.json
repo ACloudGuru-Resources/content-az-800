@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "6285502910782867346"
+      "templateHash": "1198097675113387897"
     }
   },
   "parameters": {
@@ -287,6 +287,59 @@
       "dependsOn": [
         "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
         "[resourceId('Microsoft.Compute/virtualMachines', 'BRADC2')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Automation/automationAccounts",
+      "apiVersion": "2019-06-01",
+      "name": "aa-automation-prod-001",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "name": "Free"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2020-10-01",
+      "name": "law-monitoring-prod-001",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "name": "pergb2018"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/linkedServices",
+      "apiVersion": "2020-08-01",
+      "name": "[format('{0}/{1}', 'law-monitoring-prod-001', 'Automation')]",
+      "properties": {
+        "resourceId": "[resourceId('Microsoft.Automation/automationAccounts', 'aa-automation-prod-001')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Automation/automationAccounts', 'aa-automation-prod-001')]",
+        "[resourceId('Microsoft.OperationalInsights/workspaces', 'law-monitoring-prod-001')]"
+      ]
+    },
+    {
+      "type": "Microsoft.OperationsManagement/solutions",
+      "apiVersion": "2015-11-01-preview",
+      "name": "[format('Updates({0})', 'law-monitoring-prod-001')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', 'law-monitoring-prod-001')]"
+      },
+      "plan": {
+        "name": "[format('Updates({0})', 'law-monitoring-prod-001')]",
+        "product": "OMSGallery/Updates",
+        "publisher": "Microsoft",
+        "promotionCode": ""
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces/linkedServices', 'law-monitoring-prod-001', 'Automation')]",
+        "[resourceId('Microsoft.OperationalInsights/workspaces', 'law-monitoring-prod-001')]"
       ]
     }
   ]
