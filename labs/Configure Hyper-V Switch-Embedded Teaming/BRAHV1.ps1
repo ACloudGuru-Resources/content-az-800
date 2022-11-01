@@ -18,7 +18,7 @@ Add-WindowsFeature Hyper-V -IncludeManagementTools -Restart:$false
 
 #Download Scripts
 New-Item -Path C:\Temp -ItemType Directory -ErrorAction SilentlyContinue
-Invoke-WebRequest -Uri '' -OutFile 'C:\temp\Create-VM.ps1'
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Hyper-V%20Switch-Embedded%20Teaming/Create-VM.ps1' -OutFile 'C:\temp\Create-VM.ps1'
 
 #Set Scheduled Tasks
 # Remove Deployments
