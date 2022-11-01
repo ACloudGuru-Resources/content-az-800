@@ -133,7 +133,7 @@ resource VM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20and%20Run%20a%20Windows%20Server%20Container%20Image%20on%20Windows%20Server/VM1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File VM1.ps1'
     }
