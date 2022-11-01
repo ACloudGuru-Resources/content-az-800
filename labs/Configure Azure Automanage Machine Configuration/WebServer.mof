@@ -1,0 +1,45 @@
+/*
+@TargetNode='localhost'
+@GeneratedBy=Wayne
+@GenerationDate=11/01/2022 09:29:26
+@GenerationHost=ACG
+*/
+
+instance of MSFT_WindowsFeature as $MSFT_WindowsFeature1ref
+{
+ResourceID = "[WindowsFeature]WebServer";
+ Ensure = "Present";
+ SourceInfo = "::5::9::WindowsFeature";
+ Name = "Web-Server";
+ ModuleName = "PSDscResources";
+ ModuleVersion = "2.12.0.0";
+
+ ConfigurationName = "WebServer";
+
+};
+instance of OMI_ConfigurationDocument
+
+
+                    {
+ Version="2.0.0";
+ 
+
+                        MinimumCompatibleVersion = "1.0.0";
+ 
+
+                        CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+ 
+
+                        Author="Wayne";
+ 
+
+                        GenerationDate="11/01/2022 09:29:26";
+ 
+
+                        GenerationHost="ACG";
+ 
+
+                        Name="WebServer";
+
+
+                    };

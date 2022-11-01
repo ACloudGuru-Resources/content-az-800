@@ -3,9 +3,6 @@ param vmUsername string = 'admin_user'
 @secure()
 param vmPassword string = '${substring(toUpper(uniqueString(resourceGroup().location)),0,4)}${substring(uniqueString(resourceGroup().location),0,4)}'
 
-var customImageDefinitionName =  'Win2022_Eval_VHD'
-var customImageResourceId = resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', customImageDefinitionName, 'latest')
-
 resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: 'vnet-barrierreef'
   location: location
@@ -105,7 +102,10 @@ resource VM1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        id: customImageResourceId
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter'
+        version: 'latest'
       }
       osDisk: {
         name: 'VM1-OSDisk'
@@ -143,5 +143,30 @@ resource VM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File VM1.ps1'
     }
+  }
+}
+
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' = {
+  name: 'ManagedIdentity'
+  location: location
+}
+
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(managedIdentity.id, resourceGroup().id, 'b24988ac-6180-42a0-ab88-20f7382dd24c')
+  scope: resourceGroup()
+  properties: {
+    description: 'Managed identity description'
+    principalId: managedIdentity.properties.principalId
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
+    principalType: 'ServicePrincipal'
+  }
+}
+
+resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: 'st${uniqueString(resourceGroup().id)}'
+  location: location
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
   }
 }
