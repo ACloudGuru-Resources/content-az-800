@@ -32,3 +32,6 @@ New-VM -Name "$($VM)" -Generation 1 -MemoryStartupBytes 2GB -VHDPath "D:\Temp\$(
 Add-VMNetworkAdapter -VMName BRAVM1 -SwitchName 'InternalvSwitch'
 Set-VMProcessor "$($VM)" -Count 2
 Set-VMProcessor "$($VM)" -ExposeVirtualizationExtensions $true
+
+# Start the VM
+Start-VM -VMName "$($VM)"
