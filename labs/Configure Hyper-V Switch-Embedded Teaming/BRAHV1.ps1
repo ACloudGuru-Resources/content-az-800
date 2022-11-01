@@ -42,5 +42,6 @@ Dismount-VHD -Path "D:\Temp\$($VM).vhd"
 
 # Create Virtual Machine
 New-VM -Name "$($VM)" -Generation 1 -MemoryStartupBytes 2GB -VHDPath "D:\Temp\$($VM).vhd" -SwitchName 'InternalvSwitch'
-Set-VMProcessor $($VM) -Count 2
+Set-VMProcessor "$($VM)" -Count 2
+Set-VMProcessor "$($VM)" -ExposeVirtualizationExtensions $true
 Start-VM -VMName "$($VM)"
