@@ -5,29 +5,21 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "3599887490100846093"
+      "templateHash": "406064575324627728"
     }
   },
-  "parameters": {
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]"
-    },
-    "vmUsername": {
-      "type": "string",
-      "defaultValue": "admin_user"
-    },
-    "vmPassword": {
-      "type": "secureString",
-      "defaultValue": "[format('{0}{1}', substring(toUpper(uniqueString(resourceGroup().location)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
-    }
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "vmUsername": "admin_user",
+    "uniqueString": "[substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 5)]",
+    "vmPassword": "[concat(toUpper(variables('uniqueString')), variables('uniqueString'))]"
   },
   "resources": [
     {
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2019-11-01",
       "name": "vnet-barrierreef",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -69,7 +61,7 @@
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2019-11-01",
       "name": "vnet-rivercityai",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -138,7 +130,7 @@
       "type": "Microsoft.Network/networkSecurityGroups",
       "apiVersion": "2019-11-01",
       "name": "nsg-default",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "securityRules": [
           {
@@ -162,7 +154,7 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2019-11-01",
       "name": "BRADC1-PIP",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "sku": {
         "name": "Standard"
       },
@@ -174,7 +166,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2020-11-01",
       "name": "BRADC1-NIC1",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -201,15 +193,15 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2020-12-01",
       "name": "BRADC1",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "Standard_B2s"
         },
         "osProfile": {
           "computerName": "BRADC1",
-          "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
+          "adminUsername": "[variables('vmUsername')]",
+          "adminPassword": "[variables('vmPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -245,7 +237,7 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "apiVersion": "2020-12-01",
       "name": "[format('{0}/{1}', 'BRADC1', 'BRADC1-CSE')]",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "publisher": "Microsoft.Compute",
         "type": "CustomScriptExtension",
@@ -255,7 +247,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20an%20Active%20Directory%20External%20Trust%20with%20Selective%20Authentication/BRADC1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
+          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
       },
       "dependsOn": [
@@ -266,7 +258,7 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2019-11-01",
       "name": "RCAIDC1-PIP",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "sku": {
         "name": "Standard"
       },
@@ -278,7 +270,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2020-11-01",
       "name": "RCAIDC1-NIC1",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -305,15 +297,15 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2020-12-01",
       "name": "RCAIDC1",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "Standard_B2s"
         },
         "osProfile": {
           "computerName": "RCAIDC1",
-          "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
+          "adminUsername": "[variables('vmUsername')]",
+          "adminPassword": "[variables('vmPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -349,7 +341,7 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "apiVersion": "2020-12-01",
       "name": "[format('{0}/{1}', 'RCAIDC1', 'RCAIDC1-CSE')]",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "publisher": "Microsoft.Compute",
         "type": "CustomScriptExtension",
@@ -370,7 +362,7 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2019-11-01",
       "name": "BRAWKS1-PIP",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "sku": {
         "name": "Standard"
       },
@@ -382,7 +374,7 @@
       "type": "Microsoft.Network/networkInterfaces",
       "apiVersion": "2020-11-01",
       "name": "BRAWKS1-NIC1",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "ipConfigurations": [
           {
@@ -409,15 +401,15 @@
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2020-12-01",
       "name": "BRAWKS1",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "Standard_B2s"
         },
         "osProfile": {
           "computerName": "BRAWKS1",
-          "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
+          "adminUsername": "[variables('vmUsername')]",
+          "adminPassword": "[variables('vmPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -454,7 +446,7 @@
       "type": "Microsoft.Compute/virtualMachines/extensions",
       "apiVersion": "2020-12-01",
       "name": "[format('{0}/{1}', 'BRAWKS1', 'BRAWKS1-CSE')]",
-      "location": "[parameters('location')]",
+      "location": "[variables('location')]",
       "properties": {
         "publisher": "Microsoft.Compute",
         "type": "CustomScriptExtension",

@@ -5,24 +5,18 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "12658812054411129587"
+      "templateHash": "2190334399303153062"
     }
   },
-  "parameters": {
-    "location": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().location]"
-    },
-    "random": {
-      "type": "string",
-      "defaultValue": "[format('{0}{1}', substring(toUpper(uniqueString(resourceGroup().location)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
-    }
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "random": "[format('{0}{1}', substring(toUpper(uniqueString(resourceGroup().location)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
   },
   "resources": [],
   "outputs": {
     "output": {
       "type": "string",
-      "value": "[parameters('random')]"
+      "value": "[variables('random')]"
     }
   }
 }
