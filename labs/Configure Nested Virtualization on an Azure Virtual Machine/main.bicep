@@ -139,7 +139,7 @@ resource BRAHV1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Nested%20Virtualization%20on%20an%20Azure%20Virtual%20Machine/BRAHV1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password "CF2ndIXS2bj6XTtz"'
     }

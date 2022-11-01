@@ -19,7 +19,7 @@ New-VHD -ParentPath "C:\Users\Public\Documents\20348.169.amd64fre.fe_release_svc
 
 # Download Answer File 
 New-Item -Path C:\Temp -ItemType Directory -ErrorAction SilentlyContinue
-Invoke-WebRequest -Uri "" -OutFile "C:\Temp\unattend.xml"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Nested%20Virtualization%20on%20an%20Azure%20Virtual%20Machine/unattend.xml" -OutFile "C:\Temp\unattend.xml"
 
 # Inject Password into Answer File
 (Get-Content "C:\Temp\unattend.xml") -Replace '%LABPASSWORD%', "$($Password)" | Set-Content "C:\Temp\unattend.xml"
