@@ -138,7 +138,7 @@ resource BRAHV1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Dynamic%20Host%20Configuration%20Protocol%20(DHCP)%20Servers/BRAHV1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password "${vmPassword}"'
     }
