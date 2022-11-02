@@ -34,6 +34,9 @@ foreach ($VM in $VMs) {
     New-Item -Path C:\Temp -ItemType Directory -ErrorAction SilentlyContinue
     Invoke-WebRequest -Uri "" -OutFile "C:\Temp\unattend.xml"
 
+    # Inject ComputerName into Answer File
+    (Get-Content "C:\Temp\unattend.xml") -Replace '%COMPUTERNAME%', "$($VM)" | Set-Content "C:\Temp\unattend.xml"
+
     # Inject Password into Answer File
     (Get-Content "C:\Temp\unattend.xml") -Replace '%LABPASSWORD%', "$($Password)" | Set-Content "C:\Temp\unattend.xml"
 
