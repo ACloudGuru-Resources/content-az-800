@@ -3,6 +3,9 @@ var vmUsername  = 'admin_user'
 var uniqueString = substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 8 )
 var vmPassword = concat(toUpper(uniqueString),uniqueString)
 
+var customImageDefinitionName =  'Win2022_Eval_VHD'
+var customImageResourceId = resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', customImageDefinitionName, 'latest')
+
 resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: 'vnet-barrierreef'
   location: location
@@ -23,6 +26,11 @@ resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
         }
       }
     ]
+    dhcpOptions: {
+      dnsServers: [
+        '168.63.129.16'
+      ]
+    }
   }
 }
 
@@ -48,9 +56,9 @@ resource nsgdefault 'Microsoft.Network/networkSecurityGroups@2019-11-01' = {
     ]
   }
 }
-//VM1
-resource VM1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
-  name: 'VM1-PIP'
+//BRAHV1
+resource BRAHV1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'BRAHV1-PIP'
   location: location
   sku: {
     name: 'Standard'
@@ -60,18 +68,18 @@ resource VM1PIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
   }
 }
 
-resource VM1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'VM1-NIC1'
+resource BRAHV1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
+  name: 'BRAHV1-NIC1'
   location: location
   properties: {
           ipConfigurations: [
             {
-              name: 'VM1-NIC1-IPConfig1'
+              name: 'BRAHV1-NIC1-IPConfig1'
               properties: {
                 privateIPAllocationMethod: 'Static'
                 privateIPAddress: '10.0.0.5'
                 publicIPAddress: {
-                  id: VM1PIP.id
+                  id: BRAHV1PIP.id
                 }
                 subnet: {
                   id: vnetbarrierreef.properties.subnets[0].id
@@ -82,27 +90,24 @@ resource VM1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   }
 }
 
-resource VM1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-  name: 'VM1'
+resource BRAHV1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
+  name: 'BRAHV1'
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B2s'
+      vmSize: 'standard_d2s_v3'
     }
     osProfile: {
-      computerName: 'VM1'
+      computerName: 'BRAHV1'
       adminUsername: vmUsername
       adminPassword: vmPassword
     }
     storageProfile: {
       imageReference: {
-        publisher: 'MicrosoftWindowsServer'
-        offer: 'WindowsServer'
-        sku: '2022-datacenter'
-        version: 'latest'
+        id: customImageResourceId
       }
       osDisk: {
-        name: 'VM1-OSDisk'
+        name: 'BRAHV1-OSDisk'
         caching: 'ReadWrite'
         createOption: 'FromImage'
       }
@@ -110,7 +115,7 @@ resource VM1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: VM1NIC1.id
+          id: BRAHV1NIC1.id
         }
       ]
     }
@@ -122,9 +127,9 @@ resource VM1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   }
 }
 
-resource VM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
-  parent: VM1
-  name: 'VM1-CSE'
+resource BRAHV1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
+  parent: BRAHV1
+  name: 'BRAHV1-CSE'
   location: location
   properties: {
     publisher: 'Microsoft.Compute'
@@ -133,9 +138,9 @@ resource VM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Create%20and%20Run%20a%20Windows%20Server%20Container%20Image%20on%20Windows%20Server/VM1.ps1'
+        ''
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File VM1.ps1'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password "${vmPassword}"'
     }
   }
 }
