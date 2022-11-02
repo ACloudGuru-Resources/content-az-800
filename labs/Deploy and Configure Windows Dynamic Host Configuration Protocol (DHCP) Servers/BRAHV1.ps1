@@ -33,7 +33,7 @@ foreach ($VM in $VMs) {
     # Download Answer File 
     New-Item -Path "C:\Temp\$($VM)" -ItemType Directory -ErrorAction SilentlyContinue
     $AnswerFilePath = "C:\Temp\$($VM)\unattend.xml"
-    Invoke-WebRequest -Uri "" -OutFile $AnswerFilePath
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Dynamic%20Host%20Configuration%20Protocol%20(DHCP)%20Servers/unattend.xml" -OutFile $AnswerFilePath
 
     # Inject ComputerName into Answer File
     (Get-Content $AnswerFilePath) -Replace '%COMPUTERNAME%', "$($VM)" | Set-Content $AnswerFilePath
