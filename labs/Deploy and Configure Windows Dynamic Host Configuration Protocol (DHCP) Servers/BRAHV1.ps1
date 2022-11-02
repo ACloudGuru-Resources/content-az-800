@@ -17,7 +17,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 New-Item -Path 'C:\Temp' -ItemType Directory -ErrorAction SilentlyContinue
 
 #Download Scripts
-Invoke-WebRequest -Uri 'https://github.com/ACloudGuru-Resources/content-az-800/blob/master/labs/Deploy%20and%20Configure%20Windows%20Dynamic%20Host%20Configuration%20Protocol%20(DHCP)%20Servers/Create-VM.ps1' -OutFile 'C:\temp\Create-VM.ps1'
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Dynamic%20Host%20Configuration%20Protocol%20(DHCP)%20Servers/Create-VM.ps1' -OutFile 'C:\temp\Create-VM.ps1'
 
 # Create VMs
 $VMs = @('BRADC1','BRAWKS1')

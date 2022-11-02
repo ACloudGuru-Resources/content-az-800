@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "2359431210692043162"
+      "templateHash": "3500041335633925444"
     }
   },
   "variables": {
@@ -165,7 +165,7 @@
         "autoUpgradeMinorVersion": true,
         "protectedSettings": {
           "fileUris": [
-            ""
+            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Dynamic%20Host%20Configuration%20Protocol%20(DHCP)%20Servers/BRAHV1.ps1"
           ],
           "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
