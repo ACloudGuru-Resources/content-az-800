@@ -1,7 +1,7 @@
 param(
     $UserName = 'admin_user',
     $Password,
-    $VMName
+    $VM
 )
 # Create NAT Virtual Switch
 Import-Module Hyper-V
@@ -21,15 +21,15 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ACloudGuru-Resources/c
 (Get-Content "C:\Temp\unattend.xml") -Replace '%LABPASSWORD%', "$($Password)" | Set-Content "C:\Temp\unattend.xml"
 
 #Download and Inject Answer File
-$Volume = Mount-VHD -Path "D:\Temp\$($VM).vhd" -PassThru | Get-Disk | Get-Partition | Get-Volume
+$Volume = Mount-VHD -Path "C:\Temp\$($VM).vhd" -PassThru | Get-Disk | Get-Partition | Get-Volume
 New-Item "$($Volume.DriveLetter):\Windows" -Name "Panther" -ItemType Directory -ErrorAction "SilentlyContinue"
 Copy-Item "C:\Temp\unattend.xml" "$($Volume.DriveLetter):\Windows\Panther\unattend.xml"
 
 #Dismount the VHD
-Dismount-VHD -Path "D:\Temp\$($VM).vhd"
+Dismount-VHD -Path "C:\Temp\$($VM).vhd"
 
 # Create Virtual Machine
-New-VM -Name "$($VM)" -Generation 1 -MemoryStartupBytes 2GB -VHDPath "D:\Temp\$($VM).vhd" -SwitchName 'InternalvSwitch'
+New-VM -Name "$($VM)" -Generation 1 -MemoryStartupBytes 2GB -VHDPath "C:\Temp\$($VM).vhd" -SwitchName 'InternalvSwitch'
 Add-VMNetworkAdapter -VMName BRAVM1 -SwitchName 'InternalvSwitch'
 Set-VMProcessor "$($VM)" -Count 2
 Set-VMProcessor "$($VM)" -ExposeVirtualizationExtensions $true
