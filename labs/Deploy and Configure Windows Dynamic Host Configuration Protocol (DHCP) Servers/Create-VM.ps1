@@ -7,9 +7,9 @@ param(
 Import-Module Hyper-V
 
 # Create NAT Virtual Switch
-if (-not(Get-VMSwitch -Name "InternalvSwitch")) {
+if (-not(Get-VMSwitch -Name "InternalvSwitch" -ErrorAction SilentlyContinue)) {
     New-VMSwitch -Name 'InternalvSwitch' -SwitchType 'Internal'
-    New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix “10.2.1.0/24”
+    New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix '10.2.1.0/24'
     Get-NetAdapter "vEthernet (InternalvSwitch)" | New-NetIPAddress -IPAddress 10.2.1.1 -AddressFamily IPv4 -PrefixLength 24
 } 
 
@@ -37,4 +37,4 @@ Set-VMProcessor "$($VM)" -Count 2
 Set-VMProcessor "$($VM)" -ExposeVirtualizationExtensions $true
 
 # Start the VM
-Start-VM -VMName "$($VM)"
+Start-VM -VMName "$($VM)" 

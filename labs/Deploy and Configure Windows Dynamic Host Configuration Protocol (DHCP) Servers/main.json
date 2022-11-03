@@ -5,13 +5,13 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "3500041335633925444"
+      "templateHash": "4376939773695745581"
     }
   },
   "variables": {
     "location": "[resourceGroup().location]",
     "vmUsername": "admin_user",
-    "uniqueString": "[substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 8)]",
+    "uniqueString": "6efnUYB4ASD6",
     "vmPassword": "[concat(toUpper(variables('uniqueString')), variables('uniqueString'))]",
     "customImageDefinitionName": "Win2022_Eval_VHD",
     "customImageResourceId": "[resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', variables('customImageDefinitionName'), 'latest')]"
