@@ -17,16 +17,19 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 New-Item -Path 'C:\Temp' -ItemType Directory -ErrorAction SilentlyContinue
 
 #Download Scripts
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Dynamic%20Host%20Configuration%20Protocol%20(DHCP)%20Servers/Create-VM.ps1' -OutFile 'C:\temp\Create-VM.ps1'
+Invoke-WebRequest -Uri '' -OutFile 'C:\temp\Create-VM.ps1'
 
 # Create VMs
-$VMs = @('BRADHCP1','BRASVR1')
-foreach ($VM in $VMs) {
+$VMs = @{
+    BRADC1 = 'PDC'
+    BRAIPAM1  = 'MemberServer'
+}
+foreach ($VM in $VMs.GetEnumerator()) {
     #Set Scheduled Tasks to create the VM after restart
-    $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Temp\Create-VM.ps1 -Password $($Password) -VM $($VM)"
+    $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Temp\Create-VM.ps1 -Password $($Password) -VM $($VM.Name) -Role $($VM.Value)"
     # Random dleay so both don't run at exactly the same time
     $Trigger = New-ScheduledTaskTrigger -AtStartup -RandomDelay (New-TimeSpan -Seconds 5)
-    Register-ScheduledTask -TaskName "Create-VM $($VM)" -Action $Action -Trigger $Trigger -Description "Create VM" -RunLevel Highest -User "System"
+    Register-ScheduledTask -TaskName "Create-VM $($VM.Name)" -Action $Action -Trigger $Trigger -Description "Create VM" -RunLevel Highest -User "System"
 }
 
 # Install Hyper-V
