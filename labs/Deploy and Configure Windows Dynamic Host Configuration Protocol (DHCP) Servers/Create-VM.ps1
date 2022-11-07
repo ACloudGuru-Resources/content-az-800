@@ -40,5 +40,9 @@ New-VM -Name "$($VM)" -Generation 1 -MemoryStartupBytes 2GB -VHDPath "C:\Temp\$(
 Set-VMProcessor "$($VM)" -Count 2
 Set-VMProcessor "$($VM)" -ExposeVirtualizationExtensions $true
 
+# Ensure Enhanced Session Mode is enabled on the host and VM
+Set-VMhost -EnableEnhancedSessionMode $true
+Set-VM -VMName "$($VM)" -EnhancedSessionTransportType HvSocket
+
 # Start the VM
 Start-VM -VMName "$($VM)" 

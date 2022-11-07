@@ -41,7 +41,7 @@ New-VHD -ParentPath "C:\Users\Public\Documents\20348.169.amd64fre.fe_release_svc
 # Download Answer File 
 New-Item -Path "C:\Temp\$($VM)" -ItemType Directory -ErrorAction SilentlyContinue
 $AnswerFilePath = "C:\Temp\$($VM)\unattend.xml"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Dynamic%20Host%20Configuration%20Protocol%20(DHCP)%20Servers/unattend.xml" -OutFile $AnswerFilePath
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Implement%20IP%20Address%20Management%20(IPAM)%20on%20Windows%20Server/unattend.xml" -OutFile $AnswerFilePath
 
 # Inject ComputerName into Answer File
 (Get-Content $AnswerFilePath) -Replace '%COMPUTERNAME%', "$($VM)" | Set-Content $AnswerFilePath
@@ -61,6 +61,10 @@ Dismount-VHD -Path "C:\Temp\$($VM).vhd"
 New-VM -Name "$($VM)" -Generation 1 -MemoryStartupBytes 2GB -VHDPath "C:\Temp\$($VM).vhd" -SwitchName 'InternalvSwitch'
 Set-VMProcessor "$($VM)" -Count 2
 Set-VMProcessor "$($VM)" -ExposeVirtualizationExtensions $true
+
+# Ensure Enhanced Session Mode is enabled on the host and VM
+Set-VMhost -EnableEnhancedSessionMode $true
+Set-VM -VMName "$($VM)" -EnhancedSessionTransportType HvSocket
 
 # Start the VM
 Start-VM -VMName "$($VM)" 

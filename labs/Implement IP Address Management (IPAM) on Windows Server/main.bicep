@@ -137,7 +137,7 @@ resource BRAHV1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Implement%20IP%20Address%20Management%20(IPAM)%20on%20Windows%20Server/BRAHV1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password "${vmPassword}"'
     }
