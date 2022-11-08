@@ -9,7 +9,7 @@ param(
     $IP = '10.2.1.2',
     $Prefix = '24',
     $DefaultGateway = '10.2.1.1',
-    $DNSServers = '168.63.129.16'
+    $DNSServers = @('10.2.1.2','168.63.129.16')
 )
 function Wait-VMReady ($VM)
 {
@@ -73,13 +73,13 @@ Start-VM -VMName "$($VM)"
 if ($Role -ne 'None') {
     # Generate Credentials
     $SecurePassword = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
-    [pscredential]$Credential = New-Object System.Management.Automation.PSCredential ($UserName, $SecurePassword)
+    [pscredential]$Credential = New-Object System.Management.Automation.PSCredential ("Administrator", $SecurePassword)
 
     # Wait for the VM to be ready
-    Wait-VMReady -VMName $VM
+    Wait-VMReady -VM $VM
 
     # Wait for Unattend to run
-    Wait-VMPowerShellReady -VMName $VM -Credential $Credential 
+    Wait-VMPowerShellReady -VM $VM -Credential $Credential 
 
     # Configure IP addresssing
     # IP
@@ -90,13 +90,13 @@ if ($Role -ne 'None') {
 
 # For Member Servers, perform a domain join
 if ($Role -eq 'MemberServer') {
-    $DomainJoinUserName = "$($UserName)@$($DomainName)"
+    $DomainJoinUserName = "administrator@$($DomainName)"
     [pscredential]$DomainJoinCredential = New-Object System.Management.Automation.PSCredential ($DomainJoinUserName, $SecurePassword)
     Invoke-Command -ScriptBlock {Add-Computer -Credential $using:DomainJoinCredential -DomainName "$($DomainName)" -Restart -Force} -VMName $VM -Credential $Credential
 }
 
 # For the PDC Role, Deploy the AD DS Role and Promote to a Domain Controller
 if ($Role -eq 'PDC') {
-    Invoke-Command -ScriptBlock {Install-WindowsFeature "AD-Domain-Services" -IncludeManagementTools | Out-Null} -VMName $VM -Credential $Credential
-    Invoke-Command -ScriptBlock {$DSRMPassword = ConvertTo-SecureString "p@55w0rd" -AsPlainText -Force; Install-ADDSForest -DomainName $using:DomainName -SafeModeAdministratorPassword $DSRMPassword -DomainNetBIOSName $using:DomainNetBiosName -InstallDns -Force} -VMName $VM -Credential $Credential
-}
+    Invoke-Command -ScriptBlock {$ProgressPreference = "SilentlyContinue"; $WarningPreference = "SilentlyContinue"; Install-WindowsFeature "AD-Domain-Services" -IncludeManagementTools | Out-Null} -VMName $VM -Credential $Credential
+    Invoke-Command -ScriptBlock {$ProgressPreference = "SilentlyContinue"; $WarningPreference = "SilentlyContinue"; $DSRMPassword = ConvertTo-SecureString "p@55w0rd" -AsPlainText -Force; Install-ADDSForest -DomainName $using:DomainName -SafeModeAdministratorPassword $DSRMPassword -DomainNetBIOSName $using:DomainNetBiosName -InstallDns -Force} -VMName $VM -Credential $Credential
+} 

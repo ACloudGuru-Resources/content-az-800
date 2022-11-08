@@ -258,10 +258,7 @@ resource RCAIDC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        publisher: 'MicrosoftWindowsServer'
-        offer: 'WindowsServer'
-        sku: '2022-datacenter'
-        version: 'latest'
+        id: customImageResourceId
       }
       osDisk: {
         name: 'RCAIDC1-OSDisk'
