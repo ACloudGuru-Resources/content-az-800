@@ -1,8 +1,7 @@
 param location string = resourceGroup().location
 param vmUsername string = 'admin_user'
-@secure()
-param vmPassword string = '${substring(toUpper(uniqueString(resourceGroup().location)),0,4)}${substring(uniqueString(resourceGroup().location),0,4)}'
-
+var uniqueString = substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 10 )
+var vmPassword = concat(toUpper(uniqueString),uniqueString)
 var customImageDefinitionName =  'Win2022_Eval_VHD'
 var customImageResourceId = resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', customImageDefinitionName, 'latest')
 
@@ -101,7 +100,7 @@ resource BRAHV1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     osProfile: {
       computerName: 'BRAHV1'
       adminUsername: 'admin_user'
-      adminPassword: 'CF2ndIXS2bj6XTtz'
+      adminPassword: vmPassword
     }
     storageProfile: {
       imageReference: {
@@ -141,7 +140,7 @@ resource BRAHV1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
       fileUris: [
         'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Nested%20Virtualization%20on%20an%20Azure%20Virtual%20Machine/BRAHV1.ps1'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password "CF2ndIXS2bj6XTtz"'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password "${vmPassword}"'
     }
   }
 }
