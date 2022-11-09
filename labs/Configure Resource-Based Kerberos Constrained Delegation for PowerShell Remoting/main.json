@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "10186786976911215237"
+      "templateHash": "5916680708515861481"
     }
   },
   "parameters": {
@@ -16,11 +16,13 @@
     "vmUsername": {
       "type": "string",
       "defaultValue": "admin_user"
-    },
-    "vmPassword": {
-      "type": "secureString",
-      "defaultValue": "[format('{0}{1}', substring(toUpper(uniqueString(resourceGroup().location)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
     }
+  },
+  "variables": {
+    "uniqueString": "[substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 10)]",
+    "vmPassword": "[concat(toUpper(variables('uniqueString')), variables('uniqueString'))]",
+    "customImageDefinitionName": "Win_2022_AD_Role",
+    "customImageResourceId": "[resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', variables('customImageDefinitionName'), 'latest')]"
   },
   "resources": [
     {
@@ -140,14 +142,11 @@
         "osProfile": {
           "computerName": "BRADC1",
           "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
+          "adminPassword": "[variables('vmPassword')]"
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "2022-datacenter",
-            "version": "latest"
+            "id": "[variables('customImageResourceId')]"
           },
           "osDisk": {
             "name": "BRADC1-OSDisk",
@@ -186,7 +185,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRADC1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
+          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
       },
       "dependsOn": [
@@ -244,7 +243,7 @@
         "osProfile": {
           "computerName": "BRAADM1",
           "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
+          "adminPassword": "[variables('vmPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -290,7 +289,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRAADM1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRAADM1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
+          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAADM1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
       },
       "dependsOn": [
@@ -348,7 +347,7 @@
         "osProfile": {
           "computerName": "BRAFS1",
           "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
+          "adminPassword": "[variables('vmPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -394,7 +393,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRAFS1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRAFS1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
+          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAFS1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
       },
       "dependsOn": [
@@ -452,7 +451,7 @@
         "osProfile": {
           "computerName": "BRAWKS1",
           "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
+          "adminPassword": "[variables('vmPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -498,7 +497,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Resource-Based%20Kerberos%20Constrained%20Delegation%20for%20PowerShell%20Remoting/BRAWKS1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password \"CF2ndIXS2bj6XTtz\""
+          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAWKS1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
       },
       "dependsOn": [

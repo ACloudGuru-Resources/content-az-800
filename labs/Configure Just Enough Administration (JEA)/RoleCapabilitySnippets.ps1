@@ -21,7 +21,7 @@ FunctionDefinitions = @(
                     Write-Output "$($User.Name) password reset to $($Password)"
                 }
                 catch {
-                    Write-Output "An error occured."
+                    Write-Output "An error occurred."
                 }
             }
             else {
@@ -43,7 +43,7 @@ FunctionDefinitions = @(
                     Write-Output "$($User.Name) unlocked"
                 }
                 catch {
-                    Write-Output "An error occured."
+                    Write-Output "An error occurred."
                 }
             }
             else {
