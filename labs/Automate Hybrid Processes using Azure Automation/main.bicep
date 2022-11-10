@@ -94,6 +94,9 @@ resource BRAHW1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 resource BRAHW1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'BRAHW1'
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     hardwareProfile: {
       vmSize: 'Standard_B2s'
