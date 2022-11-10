@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "6559843554067465660"
+      "templateHash": "15138811527749717930"
     }
   },
   "parameters": {
@@ -174,7 +174,7 @@
         "autoUpgradeMinorVersion": true,
         "protectedSettings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Nested%20Virtualization%20on%20an%20Azure%20Virtual%20Machine/BRAHV1.ps1"
+            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Hyper-V%20Switch-Embedded%20Teaming/BRAHV1.ps1"
           ],
           "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
