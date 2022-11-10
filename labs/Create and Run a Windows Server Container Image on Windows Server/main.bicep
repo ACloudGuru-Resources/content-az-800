@@ -1,6 +1,6 @@
 var location  = resourceGroup().location
 var vmUsername  = 'admin_user'
-var uniqueString = substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 8 )
+var uniqueString = substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 10 )
 var vmPassword = concat(toUpper(uniqueString),uniqueString)
 
 resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {

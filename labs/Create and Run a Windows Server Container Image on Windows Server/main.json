@@ -5,13 +5,13 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "13636519917279943873"
+      "templateHash": "7305855089178133081"
     }
   },
   "variables": {
     "location": "[resourceGroup().location]",
     "vmUsername": "admin_user",
-    "uniqueString": "[substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 8)]",
+    "uniqueString": "[substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 10)]",
     "vmPassword": "[concat(toUpper(variables('uniqueString')), variables('uniqueString'))]"
   },
   "resources": [
