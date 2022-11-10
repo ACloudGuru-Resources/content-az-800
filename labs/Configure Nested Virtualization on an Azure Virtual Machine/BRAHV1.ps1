@@ -16,7 +16,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 # Create VHD
 $VM = "BRAVM1"
 New-Item -Path C:\Temp -ItemType Directory -ErrorAction SilentlyContinue
-New-VHD -ParentPath "C:\Users\Public\Documents\20348.169.amd64fre.fe_release_svc_refresh.210806-2348_server_serverdatacentereval_en-us.vhd" -Path "D:\Temp\$($VM).vhd" -Differencing
+New-VHD -ParentPath "C:\Users\Public\Documents\20348.169.amd64fre.fe_release_svc_refresh.210806-2348_server_serverdatacentereval_en-us.vhd" -Path "C:\Temp\$($VM).vhd" -Differencing
 
 # Download Answer File 
 New-Item -Path C:\Temp -ItemType Directory -ErrorAction SilentlyContinue
