@@ -23,12 +23,13 @@ try{
     if (-not(Get-VMSwitch -Name "InternalvSwitch" -ErrorAction SilentlyContinue)) {
         Write-Log -Entry "Create Virtual Switch Start"
         New-VMSwitch -Name 'InternalvSwitch' -SwitchType 'Internal'
-        New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix “10.2.1.0/24”
+        New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix '10.2.1.0/24'
         Get-NetAdapter "vEthernet (InternalvSwitch)" | New-NetIPAddress -IPAddress 10.2.1.1 -AddressFamily IPv4 -PrefixLength 24
         Write-Log -Entry "Create Virtual Switch Success"
     }
 } catch {
     Write-Log -Entry "Create Virtual Switch Failed. Please contact Support."
+    Exit
 }
 
 # Create VHD
@@ -38,6 +39,7 @@ try {
     Write-Log -Entry "Create VHD Success"
 } catch {
     Write-Log -Entry "Create VHD Failed. Please contact Support."
+    Exit
 }
 
 # Download Answer File 
@@ -50,6 +52,7 @@ try {
 }
 catch {
     Write-Log -Entry "Download Answer File Failed. Please contact Support."
+    Exit
 }
 
 # Update Answer File
@@ -64,6 +67,7 @@ try {
 }
 catch {
     Write-Log -Entry "Update Answer File Failed. Please contact Support."
+    Exit
 }
 
 # Inject Answer File into VHD
@@ -76,6 +80,7 @@ try {
 }
 catch {
     Write-Log -Entry "Inject Answer File into VHD Failed. Please contact Support."
+    Exit
 }
 
 # Dismount the VHD
@@ -86,6 +91,7 @@ try {
 }
 catch {
     Write-Log -Entry "Dismount VHD Failed. Please contact Support."
+    Exit
 }
 
 # Create and Start VM
@@ -106,6 +112,7 @@ try {
 }
 catch {
     Write-Log -Entry "Create and Start VM Failed. Please contact Support."
+    Exit
 }
 
-Write-Log -Entry "LAB READY"
+Write-Log -Entry "LAB READY" 
