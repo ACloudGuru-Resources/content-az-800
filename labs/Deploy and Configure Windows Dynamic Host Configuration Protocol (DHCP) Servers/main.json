@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "6624686693340201030"
+      "templateHash": "14186031101181848174"
     }
   },
   "variables": {
@@ -151,6 +151,27 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', 'BRAHV1-NIC1')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "apiVersion": "2020-12-01",
+      "name": "[format('{0}/{1}', 'BRAHV1', 'BRAHV1-CSE')]",
+      "location": "[variables('location')]",
+      "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.10",
+        "autoUpgradeMinorVersion": true,
+        "protectedSettings": {
+          "fileUris": [
+            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Deploy%20and%20Configure%20Windows%20Dynamic%20Host%20Configuration%20Protocol%20(DHCP)%20Servers/BRAHV1.ps1"
+          ],
+          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', 'BRAHV1')]"
       ]
     }
   ]

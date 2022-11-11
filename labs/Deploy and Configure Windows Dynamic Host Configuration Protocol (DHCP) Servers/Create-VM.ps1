@@ -105,3 +105,5 @@ try {
 catch {
     Write-Log -Entry "Create and Start VM Failed. Please contact Support."
 }
+
+Write-Log -Entry "LAB READY"
