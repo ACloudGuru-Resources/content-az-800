@@ -16,13 +16,14 @@ Import-Module Hyper-V
 
 # Create NAT Virtual Switch
 Write-Log -Entry "VM Creation Start"
-Write-Log -Entry "Create Virtual Switch Start"
 try{
-    Import-Module Hyper-V
-    New-VMSwitch -Name 'InternalvSwitch' -SwitchType 'Internal'
-    New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix “10.2.1.0/24”
-    Get-NetAdapter "vEthernet (InternalvSwitch)" | New-NetIPAddress -IPAddress 10.2.1.1 -AddressFamily IPv4 -PrefixLength 24
-    Write-Log -Entry "Create Virtual Switch Success"
+    if (-not(Get-VMSwitch -Name "InternalvSwitch" -ErrorAction SilentlyContinue)) {
+        Write-Log -Entry "Create Virtual Switch Start"
+        New-VMSwitch -Name 'InternalvSwitch' -SwitchType 'Internal'
+        New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix “10.2.1.0/24”
+        Get-NetAdapter "vEthernet (InternalvSwitch)" | New-NetIPAddress -IPAddress 10.2.1.1 -AddressFamily IPv4 -PrefixLength 24
+        Write-Log -Entry "Create Virtual Switch Success"
+    }
 } catch {
     Write-Log -Entry "Create Virtual Switch Failed. Please contact Support."
 }
@@ -30,7 +31,6 @@ try{
 # Create VHD
 try {
     Write-Log -Entry "Create VHD Start"
-    $VM = "BRAVM1"
     New-VHD -ParentPath "C:\Users\Public\Documents\20348.169.amd64fre.fe_release_svc_refresh.210806-2348_server_serverdatacentereval_en-us.vhd" -Path "C:\Temp\$($VM).vhd" -Differencing
     Write-Log -Entry "Create VHD Success"
 } catch {
@@ -62,7 +62,6 @@ try {
 catch {
     Write-Log -Entry "Update Answer File Failed. Please contact Support."
 }
-
 
 # Inject Answer File into VHD
 try {
