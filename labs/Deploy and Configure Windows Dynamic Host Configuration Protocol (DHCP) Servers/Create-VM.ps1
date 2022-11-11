@@ -3,6 +3,9 @@ param(
     $Password,
     $VM
 )
+# Set the Error Action Preference
+$ErrorActionPreference = 'Stop'
+
 # Configure Logging
 $AllUsersDesktop = [Environment]::GetFolderPath("CommonDesktopDirectory")
 $LogFile = Join-Path -Path $AllUsersDesktop -ChildPath "$($VM)-Labsetup.log" 
