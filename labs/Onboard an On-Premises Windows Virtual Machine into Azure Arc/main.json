@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "15447887799173723287"
+      "templateHash": "6544273369863355703"
     }
   },
   "parameters": {
@@ -46,13 +46,7 @@
               }
             }
           }
-        ],
-        "dhcpOptions": {
-          "dnsServers": [
-            "10.0.0.5",
-            "168.63.129.16"
-          ]
-        }
+        ]
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', 'nsg-default')]"
@@ -174,7 +168,7 @@
         "autoUpgradeMinorVersion": true,
         "protectedSettings": {
           "fileUris": [
-            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Onboard%20an%20On-Premises%20%20Windows%20Virtual%20Machine%20into%20Azure%20Arc/BRAHV1.ps1"
+            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Onboard%20an%20On-Premises%20Windows%20Virtual%20Machine%20into%20Azure%20Arc/BRAHV1.ps1"
           ],
           "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
