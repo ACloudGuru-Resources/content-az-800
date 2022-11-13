@@ -14,7 +14,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAVolume" -Value 1
 
 #Download Scripts
-Invoke-WebRequest -Uri '' -OutFile 'C:\temp\Create-VM.ps1'
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Onboard%20an%20On-Premises%20Windows%20Virtual%20Machine%20into%20Azure%20Arc/Create-VM.ps1' -OutFile 'C:\temp\Create-VM.ps1'
 
 # Create VMs
 $VMs = @('BRAVM1')
