@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "7544848229538077926"
+      "templateHash": "15447887799173723287"
     }
   },
   "parameters": {
@@ -16,13 +16,11 @@
     "vmUsername": {
       "type": "string",
       "defaultValue": "admin_user"
-    },
-    "vmPassword": {
-      "type": "secureString",
-      "defaultValue": "[format('{0}{1}', substring(toUpper(uniqueString(resourceGroup().location)), 0, 4), substring(uniqueString(resourceGroup().location), 0, 4))]"
     }
   },
   "variables": {
+    "uniqueString": "[substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 10)]",
+    "vmPassword": "[concat(toUpper(variables('uniqueString')), variables('uniqueString'))]",
     "customImageDefinitionName": "Win2022_Eval_VHD",
     "customImageResourceId": "[resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', variables('customImageDefinitionName'), 'latest')]"
   },
@@ -135,7 +133,7 @@
         "osProfile": {
           "computerName": "BRAHV1",
           "adminUsername": "admin_user",
-          "adminPassword": "CF2ndIXS2bj6XTtz"
+          "adminPassword": "[variables('vmPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -178,7 +176,7 @@
           "fileUris": [
             "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Onboard%20an%20On-Premises%20%20Windows%20Virtual%20Machine%20into%20Azure%20Arc/BRAHV1.ps1"
           ],
-          "commandToExecute": "powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1"
+          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRAHV1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
         }
       },
       "dependsOn": [
