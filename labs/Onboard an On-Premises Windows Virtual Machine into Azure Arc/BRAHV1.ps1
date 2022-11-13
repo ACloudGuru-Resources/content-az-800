@@ -29,3 +29,6 @@ foreach ($VM in $VMs) {
 
 # Install Hyper-V
 Add-WindowsFeature Hyper-V -IncludeManagementTools
+
+#Restart the Server
+Restart-Computer -Force
