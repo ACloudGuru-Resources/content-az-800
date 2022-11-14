@@ -38,9 +38,11 @@ function Wait-VMPowerShellReady ($VM, $Credential)
 # Import Hyper-V Module
 Import-Module Hyper-V
 
-# Randomly sleep for 30 to 60 seconds if not PDC
-if ($Role -ne "PDC") {
-    Start-Sleep -Seconds (Get-Random -Minimum 30 -Maximum 60)
+# Randomly sleep depending on role
+if ($Role -eq "PDC") {
+    Start-Sleep -Seconds (Get-Random -Minimum 15 -Maximum 30)
+} else {
+    Start-Sleep -Seconds (Get-Random -Minimum 30 -Maximum 45)
 }
 
 # Create NAT Virtual Switch
