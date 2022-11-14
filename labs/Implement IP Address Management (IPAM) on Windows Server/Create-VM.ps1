@@ -35,11 +35,13 @@ function Wait-VMPowerShellReady ($VM, $Credential)
     }
 } 
 
-#Randomly sleep for 30 to 60 seconds
-Start-Sleep -Seconds (Get-Random -Minimum 30 -Maximum 60)
-
 # Import Hyper-V Module
 Import-Module Hyper-V
+
+# Randomly sleep for 30 to 60 seconds if not PDC
+if ($Role -ne "PDC") {
+    Start-Sleep -Seconds (Get-Random -Minimum 30 -Maximum 60)
+}
 
 # Create NAT Virtual Switch
 Write-Log -Entry "VM Creation Start"
@@ -144,7 +146,6 @@ catch {
 Write-Log -Entry "VM Customization Start"
 
 try {
-
     # Wait for the VM to be ready
     Wait-VMReady -VM $VM
     # Wait for Unattend to run
@@ -177,7 +178,10 @@ try {
     if ($Role -eq 'MemberServer') {
         $DomainJoinUserName = "administrator@$($DomainName)"
         [pscredential]$DomainJoinCredential = New-Object System.Management.Automation.PSCredential ($DomainJoinUserName, $SecurePassword)
-        Invoke-Command -ScriptBlock {Add-Computer -Credential $using:DomainJoinCredential -DomainName "$($DomainName)" -Restart -Force} -VMName $VM -Credential $Credential
+        # Wait for domain
+        Invoke-Command -ScriptBlock {while ((Test-NetConnection $($using:DomainName) -Port 389 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue).TcpTestSucceeded -eq $false) {Start-Sleep -Seconds 5}} -VMName $VM -Credential $Credential
+        # Domain Join
+        Invoke-Command -ScriptBlock {Add-Computer -Credential $using:DomainJoinCredential -DomainName "$($using:DomainName)" -Restart -Force} -VMName $VM -Credential $Credential
     }
     
     # For the PDC Role, Deploy the AD DS Role and Promote to a Domain Controller
@@ -193,5 +197,4 @@ try {
 }
 
 Wait-VMReady -VM $VM
-
 Write-Log -Entry "LAB READY" 
