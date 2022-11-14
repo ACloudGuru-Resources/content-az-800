@@ -228,9 +228,6 @@ resource BRADC2 'Microsoft.Compute/virtualMachines@2020-12-01' = {
 resource BRADC2CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
   parent: BRADC2
   name: 'BRADC2-CSE'
-  dependsOn: [
-    BRADC1CSE
-  ]
   location: location
   properties: {
     publisher: 'Microsoft.Compute'
@@ -282,9 +279,6 @@ resource BRAWKS1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 
 resource BRAWKS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'BRAWKS1'
-  dependsOn: [
-    BRADC1CSE
-  ]
   location: location
   properties: {
     hardwareProfile: {

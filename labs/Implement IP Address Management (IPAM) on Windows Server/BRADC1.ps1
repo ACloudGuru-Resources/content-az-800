@@ -14,11 +14,6 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 # Network Location Awareness Fix for Single DC
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\NlaSvc\Parameters" -Name "AlwaysExpectDomainController" -Value 1
 
-# Create Inactive Users
-$SecurePassword = ConvertTo-SecureString "$($Password)" -AsPlainText -Force
-New-LocalUser InactiveUser1 -Password $SecurePassword
-New-LocalUser InactiveUser2 -Password $SecurePassword 
-
 # Install ADDS and Create Forest
 Install-WindowsFeature "AD-Domain-Services" -IncludeManagementTools | Out-Null
 $pw = ConvertTo-SecureString "p@55w0rd" -AsPlainText -Force

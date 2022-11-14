@@ -145,7 +145,7 @@ resource BRAIPAM1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' =
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Implement%20IP%20Address%20Management%20(IPAM)%20on%20Windows%20Server/BRAIPAM1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRAIPAM1.ps1 -Password "${vmPassword}"'
     }
@@ -236,19 +236,9 @@ resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
     autoUpgradeMinorVersion: true
     protectedSettings: {
       fileUris: [
-        ''
+        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Implement%20IP%20Address%20Management%20(IPAM)%20on%20Windows%20Server/BRADC1.ps1'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "${vmPassword}"'
-    }
-  }
-}
-
-resource automationAccount 'Microsoft.Automation/automationAccounts@2019-06-01' = {
-  name: 'aa-automation-prod-001'
-  location: location
-  properties: {
-    sku: {
-      name: 'Free'
     }
   }
 }
