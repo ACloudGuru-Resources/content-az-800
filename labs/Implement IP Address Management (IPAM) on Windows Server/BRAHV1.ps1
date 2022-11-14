@@ -35,7 +35,6 @@ foreach ($VM in $VMs.GetEnumerator()) {
     $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Temp\Create-VM.ps1 -Password `"$($Password)`" -VM `"$($VM.Name)`" -Role `"$($VM.Value['Role'])`" -IP `"$($VM.Value['IP'])`""
     # Random delay so both don't run at exactly the same time
     $Trigger = New-ScheduledTaskTrigger -AtStartup
-    $Trigger.Delay = 'PT1M'
     Register-ScheduledTask -TaskName "Create-VM $($VM.Name)" -Action $Action -Trigger $Trigger -Description "Create VM" -RunLevel Highest -User "System"
 }
 

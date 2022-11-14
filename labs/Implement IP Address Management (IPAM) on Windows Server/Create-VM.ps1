@@ -35,6 +35,9 @@ function Wait-VMPowerShellReady ($VM, $Credential)
     }
 } 
 
+#Randomly sleep for 30 to 60 seconds
+Start-Sleep -Seconds (Get-Random -Minimum 30 -Maximum 60)
+
 # Import Hyper-V Module
 Import-Module Hyper-V
 
@@ -49,6 +52,7 @@ try{
         Write-Log -Entry "Create Virtual Switch Success"
     }
 } catch {
+    Write-Log $_
     Write-Log -Entry "Create Virtual Switch Failed. Please contact Support."
     Exit
 }
