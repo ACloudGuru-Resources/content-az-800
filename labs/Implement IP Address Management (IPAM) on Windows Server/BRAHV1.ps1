@@ -33,7 +33,7 @@ $VMs = @{
 foreach ($VM in $VMs.GetEnumerator()) {
     #Set Scheduled Tasks to create the VM after restart
     $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Temp\Create-VM.ps1 -Password `"$($Password)`" -VM `"$($VM.Name)`" -Role `"$($VM.Value['Role'])`" -IP `"$($VM.Value['IP'])`""
-    # Random dleay so both don't run at exactly the same time
+    # Random delay so both don't run at exactly the same time
     $Trigger = New-ScheduledTaskTrigger -AtStartup -RandomDelay (New-TimeSpan -Seconds 30)
     Register-ScheduledTask -TaskName "Create-VM $($VM.Name)" -Action $Action -Trigger $Trigger -Description "Create VM" -RunLevel Highest -User "System"
 }
