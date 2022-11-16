@@ -14,6 +14,11 @@ function Write-Log ($Entry, $Path = $LogFile) {
     Add-Content -Path $LogFile -Value "$((Get-Date).ToShortDateString()) $((Get-Date).ToShortTimeString()): $($Entry)" 
 } 
 
+# Wait for Hyper-V
+while (-not(Get-VMHost -ErrorAction SilentlyContinue)) {
+    Start-Sleep -Seconds 5
+}
+
 # Create NAT Virtual Switch
 Write-Log -Entry "VM Creation Start"
 Write-Log -Entry "Create Virtual Switch Start"
