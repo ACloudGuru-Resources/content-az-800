@@ -232,9 +232,6 @@ resource BRAWAC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
   parent: BRAWAC1
   name: 'BRAWAC1-CSE'
   location: location
-  dependsOn: [
-    BRADC1CSE
-  ]
   properties: {
     publisher: 'Microsoft.Compute'
     type: 'CustomScriptExtension'
@@ -285,9 +282,6 @@ resource BRAWKS1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 
 resource BRAWKS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'BRAWKS1'
-  dependsOn: [
-    BRADC1CSE
-  ]
   location: location
   properties: {
     hardwareProfile: {
@@ -330,9 +324,6 @@ resource BRAWKS1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = 
   parent: BRAWKS1
   name: 'BRAWKS1-CSE'
   location: location
-  dependsOn: [
-    BRADC1CSE
-  ]
   properties: {
     publisher: 'Microsoft.Compute'
     type: 'CustomScriptExtension'
