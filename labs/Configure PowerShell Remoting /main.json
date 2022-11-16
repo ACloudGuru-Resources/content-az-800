@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "11985701025300145634"
+      "templateHash": "5081896106985356312"
     }
   },
   "parameters": {
@@ -290,7 +290,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
         "[resourceId('Microsoft.Compute/virtualMachines', 'BRADC2')]"
       ]
     },
@@ -374,7 +373,6 @@
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
         "[resourceId('Microsoft.Network/networkInterfaces', 'BRAWKS1-NIC1')]"
       ]
     },
