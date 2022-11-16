@@ -33,6 +33,11 @@ function Wait-VMPowerShellReady ($VM, $Credential)
 # Import Hyper-V Module
 Import-Module Hyper-V
 
+# Wait for Hyper-V
+while (-not(Get-VMHost -ErrorAction -ErrorAction SilentlyContinue)) {
+    Start-Sleep -Seconds 5
+}
+
 # Create NAT Virtual Switch
 Write-Log -Entry "VM Creation Start"
 try{
@@ -45,6 +50,7 @@ try{
     }
 } catch {
     Write-Log -Entry "Create Virtual Switch Failed. Please contact Support."
+    Write-Log -Entry $_
     Exit
 }
 
@@ -144,9 +150,6 @@ try {
 
     # Wait for Unattend to run
     Wait-VMPowerShellReady -VM $VM -Credential $Credential
-    
-    # Rename VM
-    Invoke-Command -ScriptBlock {Rename-Computer -NewName $using:VM -Restart:$false} -VMName $VM -Credential $Credential
 
     # Configure IP addresssing
     # IP
@@ -154,6 +157,9 @@ try {
     # DNS
     Invoke-Command -ScriptBlock {Set-DnsClientServerAddress -InterfaceAlias (Get-NetIPInterface -InterfaceAlias "*Ethernet*" -AddressFamily IPv4 | Select-Object -Expand InterfaceAlias) -ServerAddresses $using:DNSServers | Out-Null} -VMName $VM -Credential $Credential
     
+    # Rename VM
+    Invoke-Command -ScriptBlock {Rename-Computer -NewName $using:VM -Restart:$false} -VMName $VM -Credential $Credential
+
     # Restart VM
     Restart-VM -Name "$($VM)" -Force
     
