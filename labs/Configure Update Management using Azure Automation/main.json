@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.9.1.41621",
-      "templateHash": "11368299086254456865"
+      "templateHash": "15564680623128046165"
     }
   },
   "parameters": {
@@ -20,9 +20,7 @@
   },
   "variables": {
     "uniqueString": "[substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 10)]",
-    "vmPassword": "[concat(toUpper(variables('uniqueString')), variables('uniqueString'))]",
-    "customImageDefinitionName": "Win_2022_AD_Role",
-    "customImageResourceId": "[resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', variables('customImageDefinitionName'), 'latest')]"
+    "vmPassword": "[concat(toUpper(variables('uniqueString')), variables('uniqueString'))]"
   },
   "resources": [
     {
@@ -128,7 +126,7 @@
       "location": "[parameters('location')]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_B2s"
+          "vmSize": "standard_b1ms"
         },
         "osProfile": {
           "computerName": "BRADC1",
@@ -137,7 +135,10 @@
         },
         "storageProfile": {
           "imageReference": {
-            "id": "[variables('customImageResourceId')]"
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2022-datacenter",
+            "version": "latest"
           },
           "osDisk": {
             "name": "BRADC1-OSDisk",
@@ -160,27 +161,6 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', 'BRADC1-NIC1')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "apiVersion": "2020-12-01",
-      "name": "[format('{0}/{1}', 'BRADC1', 'BRADC1-CSE')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "publisher": "Microsoft.Compute",
-        "type": "CustomScriptExtension",
-        "typeHandlerVersion": "1.10",
-        "autoUpgradeMinorVersion": true,
-        "protectedSettings": {
-          "fileUris": [
-            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Update%20Management%20using%20Azure%20Automation/BRADC1.ps1"
-          ],
-          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password \"{0}\"', variables('vmPassword'))]"
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines', 'BRADC1')]"
       ]
     },
     {
@@ -229,7 +209,7 @@
       "location": "[parameters('location')]",
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_B2s"
+          "vmSize": "standard_b1ms"
         },
         "osProfile": {
           "computerName": "BRADC2",
@@ -238,7 +218,10 @@
         },
         "storageProfile": {
           "imageReference": {
-            "id": "[variables('customImageResourceId')]"
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2022-datacenter",
+            "version": "latest"
           },
           "osDisk": {
             "name": "BRADC2-OSDisk",
@@ -261,28 +244,6 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', 'BRADC2-NIC1')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "apiVersion": "2020-12-01",
-      "name": "[format('{0}/{1}', 'BRADC2', 'BRADC2-CSE')]",
-      "location": "[parameters('location')]",
-      "properties": {
-        "publisher": "Microsoft.Compute",
-        "type": "CustomScriptExtension",
-        "typeHandlerVersion": "1.10",
-        "autoUpgradeMinorVersion": true,
-        "protectedSettings": {
-          "fileUris": [
-            "https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Update%20Management%20using%20Azure%20Automation/BRADC2.ps1"
-          ],
-          "commandToExecute": "[format('powershell.exe -ExecutionPolicy Bypass -File BRADC2.ps1 -Password \"{0}\"', variables('vmPassword'))]"
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Compute/virtualMachines/extensions', 'BRADC1', 'BRADC1-CSE')]",
-        "[resourceId('Microsoft.Compute/virtualMachines', 'BRADC2')]"
       ]
     },
     {

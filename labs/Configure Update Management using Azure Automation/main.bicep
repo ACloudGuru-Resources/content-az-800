@@ -2,8 +2,6 @@ param location string = resourceGroup().location
 param vmUsername string = 'admin_user'
 var uniqueString = substring('@LINUX_ACADEMY_UNIQUE_ID', 0, 10 )
 var vmPassword = concat(toUpper(uniqueString),uniqueString)
-var customImageDefinitionName =  'Win_2022_AD_Role'
-var customImageResourceId = resourceId('07089ab1-6f34-49b2-9cad-f1a654494a69', 'LACustomImagesRG', 'Microsoft.Compute/galleries/images/versions', 'LAImagesGallery', customImageDefinitionName, 'latest')
 
 resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
   name: 'vnet-barrierreef'
@@ -95,7 +93,7 @@ resource BRADC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B2s'
+      vmSize: 'standard_b1ms'
     }
     osProfile: {
       computerName: 'BRADC1'
@@ -104,7 +102,10 @@ resource BRADC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        id: customImageResourceId
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter'
+        version: 'latest'
       }
       osDisk: {
         name: 'BRADC1-OSDisk'
@@ -123,24 +124,6 @@ resource BRADC1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
       bootDiagnostics: {
         enabled: false
       }
-    }
-  }
-}
-
-resource BRADC1CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
-  parent: BRADC1
-  name: 'BRADC1-CSE'
-  location: location
-  properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.10'
-    autoUpgradeMinorVersion: true
-    protectedSettings: {
-      fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Update%20Management%20using%20Azure%20Automation/BRADC1.ps1'
-      ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC1.ps1 -Password "${vmPassword}"'
     }
   }
 }
@@ -184,7 +167,7 @@ resource BRADC2 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_B2s'
+      vmSize: 'standard_b1ms'
     }
     osProfile: {
       computerName: 'BRADC2'
@@ -193,7 +176,10 @@ resource BRADC2 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        id: customImageResourceId
+        publisher: 'MicrosoftWindowsServer'
+        offer: 'WindowsServer'
+        sku: '2022-datacenter'
+        version: 'latest'
       }
       osDisk: {
         name: 'BRADC2-OSDisk'
@@ -212,27 +198,6 @@ resource BRADC2 'Microsoft.Compute/virtualMachines@2020-12-01' = {
       bootDiagnostics: {
         enabled: false
       }
-    }
-  }
-}
-
-resource BRADC2CSE 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
-  parent: BRADC2
-  name: 'BRADC2-CSE'
-  dependsOn: [
-    BRADC1CSE
-  ]
-  location: location
-  properties: {
-    publisher: 'Microsoft.Compute'
-    type: 'CustomScriptExtension'
-    typeHandlerVersion: '1.10'
-    autoUpgradeMinorVersion: true
-    protectedSettings: {
-      fileUris: [
-        'https://raw.githubusercontent.com/ACloudGuru-Resources/content-az-800/master/labs/Configure%20Update%20Management%20using%20Azure%20Automation/BRADC2.ps1'
-      ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File BRADC2.ps1 -Password "${vmPassword}"'
     }
   }
 }
