@@ -34,7 +34,7 @@ function Wait-VMPowerShellReady ($VM, $Credential)
 Import-Module Hyper-V
 
 # Wait for Hyper-V
-while (-not(Get-VMHost -ErrorAction -ErrorAction SilentlyContinue)) {
+while (-not(Get-VMHost -ErrorAction SilentlyContinue)) {
     Start-Sleep -Seconds 5
 }
 
