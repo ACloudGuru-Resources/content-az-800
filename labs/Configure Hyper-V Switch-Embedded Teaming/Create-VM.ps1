@@ -14,6 +14,10 @@ function Write-Log ($Entry, $Path = $LogFile) {
     Add-Content -Path $LogFile -Value "$((Get-Date).ToShortDateString()) $((Get-Date).ToShortTimeString()): $($Entry)" 
 } 
 
+
+# Import the Hyper-V Module
+Import-Module Hyper-V
+
 # Wait for Hyper-V
 while (-not(Get-VMHost -ErrorAction SilentlyContinue)) {
     Start-Sleep -Seconds 5
@@ -23,13 +27,14 @@ while (-not(Get-VMHost -ErrorAction SilentlyContinue)) {
 Write-Log -Entry "VM Creation Start"
 Write-Log -Entry "Create Virtual Switch Start"
 try{
-    Import-Module Hyper-V
     New-VMSwitch -Name 'InternalvSwitch' -SwitchType 'Internal'
     New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix “10.2.1.0/24”
     Get-NetAdapter "vEthernet (InternalvSwitch)" | New-NetIPAddress -IPAddress 10.2.1.1 -AddressFamily IPv4 -PrefixLength 24
     Write-Log -Entry "Create Virtual Switch Success"
 } catch {
     Write-Log -Entry "Create Virtual Switch Failed. Please contact Support."
+    Write-Log $_
+    Exit
 }
 
 # Create VHD
@@ -40,6 +45,8 @@ try {
     Write-Log -Entry "Create VHD Success"
 } catch {
     Write-Log -Entry "Create VHD Failed. Please contact Support."
+    Write-Log $_
+    Exit
 }
 
 # Download Answer File 
@@ -51,6 +58,8 @@ try {
 }
 catch {
     Write-Log -Entry "Download Anwser File Failed. Please contact Support."
+    Write-Log $_
+    Exit
 }
 
 # Inject Password into Answer File
@@ -66,6 +75,8 @@ try {
 }
 catch {
     Write-Log -Entry "Inject Anwser File Failed. Please contact Support."
+    Write-Log $_
+    Exit
 }
 
 #Dismount the VHD
@@ -76,6 +87,8 @@ try {
 }
 catch {
     Write-Log -Entry "Dismount VHD Failed. Please contact Support."
+    Write-Log $_
+    Exit
 }
 
 # Create Virtual Machine
@@ -91,6 +104,8 @@ try {
 }
 catch {
     Write-Log -Entry "Create and Start VM Failed. Please contact Support."
+    Write-Log $_
+    Exit
 }
 
 Write-Log -Entry "LAB READY"
