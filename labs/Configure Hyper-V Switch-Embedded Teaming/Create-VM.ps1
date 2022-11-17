@@ -28,7 +28,7 @@ Write-Log -Entry "VM Creation Start"
 Write-Log -Entry "Create Virtual Switch Start"
 try{
     New-VMSwitch -Name 'InternalvSwitch' -SwitchType 'Internal'
-    New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix “10.2.1.0/24”
+    New-NetNat -Name LocalNAT -InternalIPInterfaceAddressPrefix '10.2.1.0/24'
     Get-NetAdapter "vEthernet (InternalvSwitch)" | New-NetIPAddress -IPAddress 10.2.1.1 -AddressFamily IPv4 -PrefixLength 24
     Write-Log -Entry "Create Virtual Switch Success"
 } catch {

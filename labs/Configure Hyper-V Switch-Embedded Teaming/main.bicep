@@ -27,7 +27,6 @@ resource vnetbarrierreef 'Microsoft.Network/virtualNetworks@2019-11-01' = {
     ]
     dhcpOptions: {
       dnsServers: [
-        '10.0.0.5'
         '168.63.129.16'
       ]
     }
