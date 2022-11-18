@@ -19,7 +19,7 @@ Install-WindowsFeature FS-FileServer
 New-Item -Path C:\ -Name Data -ItemType Directory
 New-SmbShare -Path C:\Data -Name Data -FullAccess Everyone
 
-# Create a PowerShell Script
+# Create some random backup files
 $RandomFiles = @('File1.bak','File2.bak','File3.bak','File4.bak','File5.bak','File6.bak','File7.bak','File8.bak','File9.bak','File10.bak')
 foreach ($File in $RandomFiles) {
     New-Item -Path C:\Data -Name $File
