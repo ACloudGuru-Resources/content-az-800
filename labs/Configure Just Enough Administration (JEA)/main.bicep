@@ -190,9 +190,6 @@ resource BRAWKS1NIC1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 
 resource BRAWKS1 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'BRAWKS1'
-  dependsOn: [
-    BRADC1CSE
-  ]
   location: location
   properties: {
     hardwareProfile: {
