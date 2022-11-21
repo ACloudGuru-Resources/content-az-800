@@ -13,6 +13,9 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "DisableNotificationCenter" -Value 1
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" -Name "HideSCAVolume" -Value 1
 
+# Install Hyper-V
+Add-WindowsFeature Hyper-V -IncludeManagementTools -Restart:$false
+
 # Create VHD
 $VM = "BRAVM1"
 New-Item -Path C:\Temp -ItemType Directory -ErrorAction SilentlyContinue
@@ -32,8 +35,6 @@ Copy-Item "C:\Temp\unattend.xml" "$($Volume.DriveLetter):\Windows\Panther\unatte
 #Dismount the VHD
 Dismount-VHD -Path "C:\Temp\$($VM).vhd"
 
-# Install Hyper-V
-Add-WindowsFeature Hyper-V -IncludeManagementTools -Restart:$false
 
 #Restart the Server
 Restart-Computer -Force
