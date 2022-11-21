@@ -2,6 +2,14 @@ param(
     $Password
 )
 
+# Import Hyper-V Module
+Import-Module Hyper-V
+
+# Wait for Hyper-V
+while (-not(Get-VMHost -ErrorAction SilentlyContinue)) {
+    Start-Sleep -Seconds 5
+}
+
 # Create VHD
 $VM = "BRAVM1"
 New-Item -Path C:\Temp -ItemType Directory -ErrorAction SilentlyContinue
