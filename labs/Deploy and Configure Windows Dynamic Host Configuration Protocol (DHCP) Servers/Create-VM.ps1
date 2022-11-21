@@ -22,6 +22,11 @@ while (-not(Get-VMHost -ErrorAction SilentlyContinue)) {
     Start-Sleep -Seconds 5
 }
 
+# Sleep for the second server
+if ($VM -eq 'BRASVR1') {
+    Start-Sleep -Seconds 30
+}
+
 # Create NAT Virtual Switch
 Write-Log -Entry "VM Creation Start"
 try{

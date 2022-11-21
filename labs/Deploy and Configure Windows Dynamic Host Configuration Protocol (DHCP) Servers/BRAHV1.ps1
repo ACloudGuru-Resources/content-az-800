@@ -24,9 +24,7 @@ $VMs = @('BRADHCP1','BRASVR1')
 foreach ($VM in $VMs) {
     #Set Scheduled Tasks to create the VM after restart
     $Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Temp\Create-VM.ps1 -Password $($Password) -VM $($VM)"
-    # Random dleay so both don't run at exactly the same time
     $Trigger = New-ScheduledTaskTrigger -AtStartup
-    $Trigger.Delay = 'PT15S'
     Register-ScheduledTask -TaskName "Create-VM $($VM)" -Action $Action -Trigger $Trigger -Description "Create VM" -RunLevel Highest -User "System"
 }
 
