@@ -17,6 +17,11 @@ function Write-Log ($Entry, $Path = $LogFile) {
 # Import Hyper-V Module
 Import-Module Hyper-V
 
+# Wait for Hyper-V
+while (-not(Get-VMHost -ErrorAction SilentlyContinue)) {
+    Start-Sleep -Seconds 5
+}
+
 # Create NAT Virtual Switch
 Write-Log -Entry "VM Creation Start"
 try{
