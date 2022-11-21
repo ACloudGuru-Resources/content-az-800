@@ -34,6 +34,7 @@ try{
     }
 } catch {
     Write-Log -Entry "Create Virtual Switch Failed. Please contact Support."
+    Write-Log $_
     Exit
 }
 
