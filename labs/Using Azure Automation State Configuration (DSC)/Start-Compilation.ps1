@@ -6,6 +6,6 @@ $ConfigurationData = @{
         }
     )
 }
-$ResourceGroupName = Get-AzResourceGroup | Select-Object -ExpandProperty Name
+$ResourceGroupName = Get-AzResourceGroup | Select-Object -ExpandProperty ResourceGroupName
 $AutomationAccountName = Get-AzAutomationAccount -ResourceGroupName $ResourceGroupName | Select-Object -ExpandProperty Name
-Start-AzAutomationDscCompilationJob -ConfigurationName 'ServerConfiguration' -ConfigurationData $ConfigurationData -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName
+Start-AzAutomationDscCompilatiåonJob -ConfigurationName 'ServerConfiguration' -ConfigurationData $ConfigurationData -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName
